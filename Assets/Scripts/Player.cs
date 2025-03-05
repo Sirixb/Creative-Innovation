@@ -12,9 +12,11 @@ public class Player : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private Vector2 movement;
     [SerializeField] private bool facingLeft;
+    public bool FacingLeft { get => facingLeft; private set => facingLeft = value; }
+
+    private Camera _mainCamera;
 
     private readonly int _runHash = Animator.StringToHash("run");
-    private Camera _mainCamera;
 
     private void Awake()
     {
@@ -46,13 +48,13 @@ public class Player : MonoBehaviour
 
         if (mousePosition.x < playerScreenPoint.x)
         {
-            spriteRenderer.flipX = true;
             facingLeft = true;
+            transform.rotation = Quaternion.Euler(0, -180, 0);
         }
         else
         {
-            spriteRenderer.flipX = false;
             facingLeft = false;
+            transform.rotation = Quaternion.Euler(0, 0, 0);
         }
     }
 
