@@ -37,7 +37,7 @@ public class Player : MonoBehaviour
     private void Move()
     {
         movement = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        movement.Normalize();
+        if (movement != Vector2.zero) movement.Normalize();
         rb.MovePosition(rb.position + movement * (speed * Time.deltaTime));
     }
 
