@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Animator animator;
@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     [SerializeField] private PlayerHealth playerHealth;
     [SerializeField] private CapsuleCollider2D capsuleCollider2D;
     [SerializeField] private Collider2D collider2d;
+    [SerializeField] private KnockBack knockBack;
     private IWeapon _weapon;
 
 
@@ -44,6 +45,7 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (knockBack.GettingKnockedBack) { return; }
         Move();
     }
 
