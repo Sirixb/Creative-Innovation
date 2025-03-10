@@ -7,6 +7,7 @@ public class PlayerHealth : MonoBehaviour, IDamageable
 {
     [SerializeField] private Animator animator;
     [SerializeField] private KnockBack knockBack;
+    [SerializeField] private Flash flash;
     [SerializeField] private int currentHealth = 100;
     [SerializeField] private bool canTakeDamage = true;
     [SerializeField] private float invulnerabilityRecoveryTime = 1f;
@@ -28,6 +29,7 @@ public class PlayerHealth : MonoBehaviour, IDamageable
         canTakeDamage = false;
         currentHealth -= damageAmount;
         knockBack.GetKnockedBack(hitTransform,knockBackThrustAmount);  
+        StartCoroutine(flash.FlashRoutine());
         StartCoroutine(DamageRecoveryRoutine());
         // CheckIfPlayerDeath();
     }

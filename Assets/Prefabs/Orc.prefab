@@ -51,6 +51,7 @@ GameObject:
   - component: {fileID: 7937536472801235630}
   - component: {fileID: 699791242279078083}
   - component: {fileID: 8502719514784131523}
+  - component: {fileID: 1525871865240604748}
   m_Layer: 0
   m_Name: Orc
   m_TagString: Enemy
@@ -252,7 +253,7 @@ MonoBehaviour:
     useOutsideNormalAngle: 0
     layerMask:
       serializedVersion: 2
-      m_Bits: 1
+      m_Bits: 72
     minDepth: 0
     maxDepth: 0
     minNormalAngle: 0
@@ -309,6 +310,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   knockBackTime: 0.2
   rigidbody2d: {fileID: 6119961073591460586}
+--- !u!114 &1525871865240604748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4597364628815580452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7257db13f1c2535409b29b069aa42064, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  whiteFlashMaterial: {fileID: 2100000, guid: c11f03e19d96eaa4bbf34f44ef927e02, type: 2}
+  restoreDefaultMaterialTime: 0.2
 --- !u!1 &4755182255672539415
 GameObject:
   m_ObjectHideFlags: 0

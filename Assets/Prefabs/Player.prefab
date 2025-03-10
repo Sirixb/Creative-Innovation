@@ -478,6 +478,7 @@ GameObject:
   - component: {fileID: 4950602711907470862}
   - component: {fileID: 8494582047075401039}
   - component: {fileID: 8327619843242226338}
+  - component: {fileID: 5832474598515834390}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -701,3 +702,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   knockBackTime: 0.2
   rigidbody2d: {fileID: 8979471599088877958}
+--- !u!114 &5832474598515834390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8151828310776085878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7257db13f1c2535409b29b069aa42064, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  whiteFlashMaterial: {fileID: 2100000, guid: c11f03e19d96eaa4bbf34f44ef927e02, type: 2}
+  restoreDefalutMaterialTime: 0.2
