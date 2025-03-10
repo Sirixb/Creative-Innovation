@@ -39,9 +39,6 @@ public class EnemyState : MonoBehaviour
     [SerializeField] private bool isPlayerInSight;
     [SerializeField] private bool isPlayerInRange;
 
-    [Header("Damage ")]
-    [SerializeField] private int damageByContact = 10;
-    public int DamageByContact => damageByContact;
     private float _attackRateTimer = 0f;
 
     private readonly List<RaycastHit2D> _results = new List<RaycastHit2D>();

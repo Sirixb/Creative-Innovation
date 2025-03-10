@@ -4,52 +4,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-public class EnemyHealth : MonoBehaviour, IDamageable
+public class EnemyHealth : Health
 {
-    [SerializeField] private Animator animator;
-    [SerializeField] private KnockBack knockBack;
-    [SerializeField] private Flash flash;
-    [SerializeField] private int currentHealth = 100;
-    [SerializeField] private bool canTakeDamage = true;
-    [SerializeField] private float invulnerabilityRecoveryTime = 1f;
-    [SerializeField] private float knockBackThrustAmount = 10f;
     [SerializeField] private GameObject deathZombieVFXPrefab;
-    public bool isDeath = false;
-
+    
+    [Header("Damage ")]
+    [SerializeField] private int damageByContact = 10;
+    public int DamageByContact => damageByContact;
+   
     public event Action OnEnemyDie;
 
     private readonly int _dieHash = Animator.StringToHash("die");
-
-    public void TakeDamage(int damageAmount, Transform hitTransform)
+    
+    protected override void CheckIfDeath()
     {
-        if (isDeath || !canTakeDamage)
-        {
-            return;
-        }
-
-        canTakeDamage = false;
-        currentHealth -= damageAmount;
-        knockBack.GetKnockedBack(hitTransform,knockBackThrustAmount);  
-        StartCoroutine(flash.FlashRoutine());
-        StartCoroutine(DamageRecoveryRoutine());
-        CheckIfPlayerDeath();
-    }
-
-    private void CheckIfPlayerDeath()
-    {
-        if (currentHealth > 0 || isDeath) return;
-        isDeath = true;
-        currentHealth = 0;
+        base.CheckIfDeath();
+        
+        if (!IsDeath) return;
         OnEnemyDie?.Invoke();
     }
-
-    private IEnumerator DamageRecoveryRoutine()
-    {
-        yield return new WaitForSeconds(invulnerabilityRecoveryTime);
-        canTakeDamage = true;
-    }
-    
-    private void DeathVFX()
+     
+    public void DeathEnemyVFX()
     {
         Instantiate(deathZombieVFXPrefab, transform.position, Quaternion.identity);
         Destroy(gameObject);

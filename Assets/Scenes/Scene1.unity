@@ -16804,17 +16804,6 @@ MonoBehaviour:
   m_InstancedGameObject: {fileID: 0}
   m_Flags: 3
   m_ColliderType: 1
---- !u!114 &588727927 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5832474598515834390, guid: 1322df1218279bc4f962dd3166d87e96, type: 3}
-  m_PrefabInstance: {fileID: 7050538295040508421}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7257db13f1c2535409b29b069aa42064, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &607157333
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -31081,10 +31070,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 699791242279078083, guid: d6a7be5a7c7c717468afe1688366aed1, type: 3}
-      propertyPath: flash
-      value: 
-      objectReference: {fileID: 5704655595628871049}
     - target: {fileID: 3806650075162476668, guid: d6a7be5a7c7c717468afe1688366aed1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.56
@@ -31134,17 +31119,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d6a7be5a7c7c717468afe1688366aed1, type: 3}
---- !u!114 &5704655595628871049 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1525871865240604748, guid: d6a7be5a7c7c717468afe1688366aed1, type: 3}
-  m_PrefabInstance: {fileID: 5704655595628871048}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7257db13f1c2535409b29b069aa42064, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &7050538295040508421
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -31199,12 +31173,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8249716270258980414, guid: 1322df1218279bc4f962dd3166d87e96, type: 3}
       propertyPath: damage
-      value: 1
+      value: 50
       objectReference: {fileID: 0}
-    - target: {fileID: 8494582047075401039, guid: 1322df1218279bc4f962dd3166d87e96, type: 3}
-      propertyPath: flash
-      value: 
-      objectReference: {fileID: 588727927}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

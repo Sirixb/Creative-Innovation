@@ -260,7 +260,6 @@ MonoBehaviour:
     maxNormalAngle: 0
   isPlayerInSight: 0
   isPlayerInRange: 0
-  damageByContact: 10
 --- !u!114 &7937536472801235630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -290,12 +289,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 8644921011852193297}
   knockBack: {fileID: 8502719514784131523}
+  flash: {fileID: 1525871865240604748}
   currentHealth: 100
   canTakeDamage: 1
   invulnerabilityRecoveryTime: 0.4
   knockBackThrustAmount: 10
   deathZombieVFXPrefab: {fileID: 5243032396917922483, guid: 856af2b135dcd324497824576fb6ca46, type: 3}
-  isDeath: 0
+  damageByContact: 10
 --- !u!114 &8502719514784131523
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -531,7 +531,7 @@ CircleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6064101519490862354}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:

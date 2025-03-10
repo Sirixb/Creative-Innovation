@@ -684,6 +684,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 7439440649204839498}
   knockBack: {fileID: 8327619843242226338}
+  flash: {fileID: 5832474598515834390}
   currentHealth: 100
   canTakeDamage: 1
   invulnerabilityRecoveryTime: 1
@@ -715,4 +716,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   whiteFlashMaterial: {fileID: 2100000, guid: c11f03e19d96eaa4bbf34f44ef927e02, type: 2}
-  restoreDefalutMaterialTime: 0.2
+  restoreDefaultMaterialTime: 0.2
