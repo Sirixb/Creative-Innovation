@@ -8,11 +8,15 @@ public class Player : MonoBehaviour
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Animator animator;
     [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private PlayerHealth playerHealth;
+    [SerializeField] private CapsuleCollider2D capsuleCollider2D;
+    [SerializeField] private Collider2D collider2d;
+    private IWeapon _weapon;
+
 
     [SerializeField] private float speed;
-    [SerializeField] private Vector2 movement;
-    [SerializeField] private bool facingLeft;
-    public bool FacingLeft { get => facingLeft; private set => facingLeft = value; }
+    public bool FacingLeft { get; private set; }
+    private Vector2 _movement;
 
     private Camera _mainCamera;
 
@@ -21,6 +25,21 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         _mainCamera = Camera.main;
+        _weapon = GetComponentInChildren<IWeapon>();
+    }
+    private void OnEnable()
+    {
+        if (playerHealth != null)
+        {
+            playerHealth.OnPlayerDie += DisableComponentsOnPlayerDie;
+        }
+    }
+
+    private void DisableComponentsOnPlayerDie()
+    {
+        _weapon.DisableWeapon();
+        capsuleCollider2D.enabled = false;
+        this.enabled = false;
     }
 
     private void FixedUpdate()
@@ -36,9 +55,9 @@ public class Player : MonoBehaviour
 
     private void Move()
     {
-        movement = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        if (movement != Vector2.zero) movement.Normalize();
-        rb.MovePosition(rb.position + movement * (speed * Time.deltaTime));
+        _movement = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        if (_movement != Vector2.zero) _movement.Normalize();
+        rb.MovePosition(rb.position + _movement * (speed * Time.deltaTime));
     }
 
     private void FacingDirection()
@@ -48,19 +67,23 @@ public class Player : MonoBehaviour
 
         if (mousePosition.x < playerScreenPoint.x)
         {
-            facingLeft = true;
+            FacingLeft = true;
             transform.rotation = Quaternion.Euler(0, -180, 0);
         }
         else
         {
-            facingLeft = false;
+            FacingLeft = false;
             transform.rotation = Quaternion.Euler(0, 0, 0);
         }
     }
 
     private void Animation()
     {
-        var move = Math.Abs(movement.x) + Math.Abs(movement.y);
+        var move = Math.Abs(_movement.x) + Math.Abs(_movement.y);
         animator.SetFloat(_runHash, move);
+    }
+    private void OnDisable()
+    {
+        playerHealth.OnPlayerDie -= DisableComponentsOnPlayerDie;
     }
 }

@@ -4,13 +4,13 @@ using UnityEngine;
 
 public abstract class AttackStrategy : MonoBehaviour
 {
-    [SerializeField] protected float damage = 10f;
+    [SerializeField] protected int damage = 10;
     [SerializeField] protected float attackRange = 2f;
     [SerializeField] protected float attackRate = 1f;
 
-    public float Damage => damage;
+    public int Damage => damage;
     public float AttackRange => attackRange;
     public float AttackRate => attackRate;
 
-    public abstract void Attack(Transform attacker, Transform target);
+    public abstract void Attack(Transform attacker, Transform target, Collider2D collider2d);
 }

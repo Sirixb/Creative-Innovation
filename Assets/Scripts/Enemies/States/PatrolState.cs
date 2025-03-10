@@ -3,37 +3,38 @@ using UnityEngine;
 
 public class PatrolState : IEnemyState
 {
-    private Enemy _enemy;
+    private EnemyState _enemyState;
     private Vector2 _randomDirection;
     private float _randomPatrolTime = 0;
     private float _counterPatrolTime = 0;
 
-    public void Enter(Enemy enemy)
+    public void Enter(EnemyState enemyState)
     {
         // Debug.Log("Entrando en estado de patrulla");
-        this._enemy = enemy;
+        this._enemyState = enemyState;
         _counterPatrolTime = 0f;
-        _randomPatrolTime = Random.Range(_enemy.MinPatrolTime, _enemy.MaxPatrolTime);
+        _randomPatrolTime = Random.Range(_enemyState.MinPatrolTime, _enemyState.MaxPatrolTime);
         _randomDirection = Random.insideUnitSphere;
         _randomDirection.Normalize();
 
-        _enemy.SetRotation(_randomDirection.x);
-        _enemy.SetAnimation("Run");
+        _enemyState.SetRotation(_randomDirection.x);
+        _enemyState.SetAnimation("Run");
     }
 
     public void Update()
     {
         // Debug.Log("Patrullando");
-        _enemy.SetPosition(_randomDirection * (_enemy.PatrolSpeed * Time.deltaTime));
+        
+        _enemyState.SetPosition(_randomDirection * (_enemyState.PatrolSpeed * Time.deltaTime));
 
         _counterPatrolTime += Time.deltaTime;
         if (_counterPatrolTime >= _randomPatrolTime)
         {
-            _enemy.ChangeState(new IdleState());
+            _enemyState.ChangeState(new IdleState());
         }
-        else if (_enemy.PlayerInSight())
+        else if (_enemyState.PlayerInSight())
         {
-            _enemy.ChangeState(new ChaseState());
+            _enemyState.ChangeState(new ChaseState());
         }
     }
 

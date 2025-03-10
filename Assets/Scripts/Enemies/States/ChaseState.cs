@@ -2,27 +2,28 @@
 
 public class ChaseState : IEnemyState
 {
-    private Enemy _enemy;
+    private EnemyState _enemyState;
 
-    public void Enter(Enemy enemy)
+    public void Enter(EnemyState enemyState)
     {
         // Debug.Log("Entrando en estado de persecución");
-        this._enemy = enemy;
-        _enemy.SetAnimation("Run");
+        this._enemyState = enemyState;
+        _enemyState.SetAnimation("Run");
     }
 
     public void Update()
     {
         // Debug.Log("persecución");
-        _enemy.ChasePlayer();
+      
+        _enemyState.ChasePlayer();
 
-        if (!_enemy.PlayerInSight())
+        if (!_enemyState.PlayerInSight())
         {
-            _enemy.ChangeState(new IdleState());
+            _enemyState.ChangeState(new IdleState());
         }
-        else if (_enemy.PlayerInRange())
+        else if (_enemyState.PlayerInRange())
         {
-            _enemy.ChangeState(new AttackState());
+            _enemyState.ChangeState(new AttackState());
         }
     }
 

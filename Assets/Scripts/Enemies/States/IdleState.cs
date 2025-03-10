@@ -2,34 +2,32 @@
 
 public class IdleState : IEnemyState
 {
-    private Enemy _enemy;
+    private EnemyState _enemyState;
     private float _randomIdleTime;
     private float _counterIdleTime;
 
-    public void Enter(Enemy enemy)
+    public void Enter(EnemyState enemyState)
     {
         // Debug.Log("Entered IdleState");
-        this._enemy = enemy;
+        this._enemyState = enemyState;
         _counterIdleTime = 0f;
-        _randomIdleTime = Random.Range(_enemy.MinIdleTime, _enemy.MaxIdleTime);
+        _randomIdleTime = Random.Range(_enemyState.MinIdleTime, _enemyState.MaxIdleTime);
 
-        _enemy.SetAnimation("Idle");
+        _enemyState.SetAnimation("Idle");
     }
 
     public void Update()
     {
         // Debug.Log("Idle State");
-        _enemy.SetPosition(Vector2.zero);
-
+        
+        _enemyState.SetPosition(Vector2.zero);
         _counterIdleTime += Time.deltaTime;
+
         if (_counterIdleTime >= _randomIdleTime)
-        {
-            _enemy.ChangeState(new PatrolState());
-        }
-        else if (_enemy.PlayerInSight())
-        {
-            _enemy.ChangeState(new ChaseState());
-        }
+            _enemyState.ChangeState(new PatrolState());
+
+        else if (_enemyState.PlayerInSight())
+            _enemyState.ChangeState(new ChaseState());
     }
 
     public void Exit()

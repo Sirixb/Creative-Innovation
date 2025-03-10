@@ -4,14 +4,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class Enemy : MonoBehaviour
+public class EnemyState : MonoBehaviour
 {
     private Rigidbody2D _rb;
     private CapsuleCollider2D _capsuleCollider2D;
     private Animator _animator;
     private SpriteRenderer _spriteRenderer;
-    private CircleCollider2D _circleCollider2D;
+    private Collider2D _collider2D;
     private Player _player;
+    private PlayerHealth _playerHealth;
+    private EnemyHealth _enemyHealth;
 
     [Header("IA Configuration")]
     [SerializeField] private float minIdleTime = 1f;
@@ -22,7 +24,6 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float chaseSpeed = 2f;
     public float MinIdleTime => minIdleTime;
     public float MaxIdleTime => maxIdleTime;
-    public float ChaseSpeed => chaseSpeed;
     public float PatrolSpeed => patrolSpeed;
     public float MinPatrolTime => minPatrolTime;
     public float MaxPatrolTime => maxPatrolTime;
@@ -36,17 +37,13 @@ public class Enemy : MonoBehaviour
     [SerializeField] private ContactFilter2D contactFilter;
     [SerializeField] private bool isPlayerInSight;
     [SerializeField] private bool isPlayerInRange;
-    // public bool IsPlayerInSight { get => _isPlayerInSight; private set => _isPlayerInSight = value; }
-    // public bool IsPlayerInRange { get => _isPlayerInRange; private set => _isPlayerInRange = value; }
 
-    private readonly List<RaycastHit2D> _results = new List<RaycastHit2D>();
-
-    public int RunHash { get; } = Animator.StringToHash("run");
-    public int AttackHash { get; } = Animator.StringToHash("attack");
-    public int InRangeHash { get; } = Animator.StringToHash("inRange");
-
+    [Header("Damage ")]
+    [SerializeField] private int damageByContact = 10;
+    public int DamageByContact => damageByContact;
     private float _attackRateTimer = 0f;
 
+    private readonly List<RaycastHit2D> _results = new List<RaycastHit2D>();
 
     private void Awake()
     {
@@ -54,11 +51,31 @@ public class Enemy : MonoBehaviour
         _animator = GetComponent<Animator>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _capsuleCollider2D = GetComponent<CapsuleCollider2D>();
-        _circleCollider2D = GetComponentInChildren<CircleCollider2D>();
+        _collider2D = transform.GetChild(1).GetComponentInChildren<Collider2D>();
         _attackStrategy = GetComponentInChildren<AttackStrategy>();
         _player = FindObjectOfType<Player>();
+        _playerHealth = _player.GetComponent<PlayerHealth>();
+        _enemyHealth = GetComponent<EnemyHealth>();
     }
 
+    private void OnEnable()
+    {
+        _enemyHealth.OnEnemyDie += OnEnemyDie;
+        _playerHealth.OnPlayerDie += OnPlayerDie;
+    }
+
+    private void OnPlayerDie()
+    {
+        ChangeState(new IdleState());
+    }
+
+    private void OnEnemyDie()
+    {
+        ChangeState(new DieState());
+        _capsuleCollider2D.enabled = false;
+        _collider2D.enabled = false;
+    }
+    
     private void Start()
     {
         ChangeState(new IdleState());
@@ -98,14 +115,12 @@ public class Enemy : MonoBehaviour
         var hitCount = Physics2D.Raycast(viewPosition.position, target, contactFilter, _results, viewDistance);
         for (var i = 0; i < hitCount; i++)
         {
-            // Debug.Log("Rayo detecto: " + _results[i].collider.name);
             if (_results[0].collider.CompareTag("Player"))
             {
                 isPlayerInSight = true;
                 break;
             }
         }
-
         return isPlayerInSight;
     }
 
@@ -126,7 +141,7 @@ public class Enemy : MonoBehaviour
 
         var target = GetDirectionToPlayer();
         Debug.DrawRay(transform.position, target, Color.green);
-        SetPosition(target * (ChaseSpeed * Time.deltaTime));
+        SetPosition(target * (chaseSpeed * Time.deltaTime));
         SetRotation(target.x);
     }
 
@@ -154,7 +169,7 @@ public class Enemy : MonoBehaviour
     public void Attack()
     {
         SetRotation(GetDirectionToPlayer().x);
-        _attackStrategy?.Attack(transform, _player.transform);
+        _attackStrategy?.Attack(transform, _player.transform, _collider2D);
     }
 
     public bool CanAttack()
@@ -169,9 +184,9 @@ public class Enemy : MonoBehaviour
         return false;
     }
 
-    private void OnDrawGizmosSelected()
+    private void OnDisable()
     {
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, GetComponentInChildren<AttackStrategy>().AttackRate);
+        _enemyHealth.OnEnemyDie += OnEnemyDie;
+        _playerHealth.OnPlayerDie += OnPlayerDie;
     }
 }

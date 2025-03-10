@@ -2,7 +2,7 @@
 
 public interface IEnemyState
 {
-    void Enter(Enemy enemy); 
+    void Enter(EnemyState enemyState); 
     void Update(); 
     void Exit(); 
 }

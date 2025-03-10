@@ -2,41 +2,35 @@
 
 public class AttackState : IEnemyState
 {
-    private Enemy _enemy;
+    private EnemyState _enemyState;
 
-    public void Enter(Enemy enemy)
+    public void Enter(EnemyState enemyState)
     {
-        this._enemy = enemy;
+        this._enemyState = enemyState;
         // Debug.Log("Entrando en estado de ataque");
-        Attack();
+        CallAttack();
     }
 
     public void Update()
     {
-        _enemy.SetPosition(Vector2.zero);
+        _enemyState.SetPosition(Vector2.zero);
 
-        if (!_enemy.CanAttack())
+        if (!_enemyState.CanAttack())
             return;
 
-        if (_enemy.PlayerInRange())
-        {
             // Debug.Log("Atacando");
-            Attack();
-        }
-        else if (_enemy.PlayerInSight())
-        {
-            _enemy.ChangeState(new ChaseState());
-        }
-        else if (!_enemy.PlayerInSight())
-        {
-            _enemy.ChangeState(new IdleState());
-        }
+        if (_enemyState.PlayerInRange())
+            CallAttack();
+        else if (_enemyState.PlayerInSight())
+            _enemyState.ChangeState(new ChaseState());
+        else if (!_enemyState.PlayerInSight())
+            _enemyState.ChangeState(new IdleState());
     }
 
-    private void Attack()
+    private void CallAttack()
     {
-        _enemy.Attack();
-        _enemy.SetAnimation("Attack");
+        _enemyState.Attack();
+        _enemyState.SetAnimation("Attack");
     }
 
     public void Exit()
