@@ -2,13 +2,17 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 public class EnemyHealth : MonoBehaviour, IDamageable
 {
     [SerializeField] private Animator animator;
+    [SerializeField] private KnockBack knockBack;
     [SerializeField] private int currentHealth = 100;
     [SerializeField] private bool canTakeDamage = true;
     [SerializeField] private float invulnerabilityRecoveryTime = 1f;
+    [SerializeField] private float knockBackThrustAmount = 10f;
+    [SerializeField] private GameObject deathZombieVFXPrefab;
     public bool isDeath = false;
 
     public event Action OnEnemyDie;
@@ -24,6 +28,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
         canTakeDamage = false;
         currentHealth -= damageAmount;
+        knockBack.GetKnockedBack(hitTransform,knockBackThrustAmount);  
         StartCoroutine(DamageRecoveryRoutine());
         CheckIfPlayerDeath();
     }
@@ -40,5 +45,11 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     {
         yield return new WaitForSeconds(invulnerabilityRecoveryTime);
         canTakeDamage = true;
+    }
+    
+    private void DeathVFX()
+    {
+        Instantiate(deathZombieVFXPrefab, transform.position, Quaternion.identity);
+        Destroy(gameObject);
     }
 }

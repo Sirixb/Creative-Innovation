@@ -11,9 +11,10 @@ public class EnemyState : MonoBehaviour
     private Animator _animator;
     private SpriteRenderer _spriteRenderer;
     private Collider2D _collider2D;
-    private Player _player;
+    private PlayerController _playerController;
     private PlayerHealth _playerHealth;
     private EnemyHealth _enemyHealth;
+    private KnockBack _knockBack;
 
     [Header("IA Configuration")]
     [SerializeField] private float minIdleTime = 1f;
@@ -53,9 +54,10 @@ public class EnemyState : MonoBehaviour
         _capsuleCollider2D = GetComponent<CapsuleCollider2D>();
         _collider2D = transform.GetChild(1).GetComponentInChildren<Collider2D>();
         _attackStrategy = GetComponentInChildren<AttackStrategy>();
-        _player = FindObjectOfType<Player>();
-        _playerHealth = _player.GetComponent<PlayerHealth>();
+        _playerController = FindObjectOfType<PlayerController>();
+        _playerHealth = _playerController.GetComponent<PlayerHealth>();
         _enemyHealth = GetComponent<EnemyHealth>();
+        _knockBack = GetComponent<KnockBack>();
     }
 
     private void OnEnable()
@@ -83,6 +85,7 @@ public class EnemyState : MonoBehaviour
 
     private void Update()
     {
+        if(_knockBack.GettingKnockedBack){return;}
         _currentState?.Update();
     }
 
@@ -95,7 +98,7 @@ public class EnemyState : MonoBehaviour
 
     private Vector2 GetDirectionToPlayer()
     {
-        var player = _player.transform.position;
+        var player = _playerController.transform.position;
         Vector2 target = player - viewPosition.position;
         target.Normalize();
         return target;
@@ -103,23 +106,23 @@ public class EnemyState : MonoBehaviour
 
     private Vector2 GetPlayerPosition()
     {
-        return _player.transform.position;
+        return _playerController.transform.position;
     }
 
     public bool PlayerInSight()
     {
         isPlayerInSight = false;
+        _results.Clear();
         var target = GetDirectionToPlayer();
         Debug.DrawRay(viewPosition.position, target * viewDistance, Color.red);
-
+        
         var hitCount = Physics2D.Raycast(viewPosition.position, target, contactFilter, _results, viewDistance);
         for (var i = 0; i < hitCount; i++)
         {
-            if (_results[0].collider.CompareTag("Player"))
-            {
-                isPlayerInSight = true;
-                break;
-            }
+            // Debug.Log(_results[i].transform.name);
+            if (!_results[i].collider.CompareTag("Player")) continue;
+            isPlayerInSight = true;
+            break;
         }
         return isPlayerInSight;
     }
@@ -169,7 +172,7 @@ public class EnemyState : MonoBehaviour
     public void Attack()
     {
         SetRotation(GetDirectionToPlayer().x);
-        _attackStrategy?.Attack(transform, _player.transform, _collider2D);
+        _attackStrategy?.Attack(transform, _playerController.transform, _collider2D);
     }
 
     public bool CanAttack()

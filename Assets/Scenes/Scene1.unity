@@ -28417,7 +28417,7 @@ GameObject:
   - component: {fileID: 1880471564}
   - component: {fileID: 1880471563}
   - component: {fileID: 1880471562}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Box
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31131,10 +31131,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1409764682610177874, guid: 1322df1218279bc4f962dd3166d87e96, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
     - target: {fileID: 2910221137313377303, guid: 1322df1218279bc4f962dd3166d87e96, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.191
@@ -31175,33 +31171,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3474168132426241815, guid: 1322df1218279bc4f962dd3166d87e96, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 3489503134745016826, guid: 1322df1218279bc4f962dd3166d87e96, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 5584635385462664643, guid: 1322df1218279bc4f962dd3166d87e96, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 6303110217528051325, guid: 1322df1218279bc4f962dd3166d87e96, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 7959856321136705824, guid: 1322df1218279bc4f962dd3166d87e96, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
     - target: {fileID: 8151828310776085878, guid: 1322df1218279bc4f962dd3166d87e96, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 8151828310776085878, guid: 1322df1218279bc4f962dd3166d87e96, type: 3}
-      propertyPath: m_Layer
-      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 8249716270258980414, guid: 1322df1218279bc4f962dd3166d87e96, type: 3}
       propertyPath: damage

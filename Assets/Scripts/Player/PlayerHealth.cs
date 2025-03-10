@@ -6,9 +6,13 @@ using UnityEngine;
 public class PlayerHealth : MonoBehaviour, IDamageable
 {
     [SerializeField] private Animator animator;
+    [SerializeField] private KnockBack knockBack;
     [SerializeField] private int currentHealth = 100;
     [SerializeField] private bool canTakeDamage = true;
     [SerializeField] private float invulnerabilityRecoveryTime = 1f;
+    [SerializeField] private float knockBackThrustAmount = 10f;
+
+    
     private bool _isDeath = false;
     public event Action OnPlayerDie;
 
@@ -23,8 +27,9 @@ public class PlayerHealth : MonoBehaviour, IDamageable
 
         canTakeDamage = false;
         currentHealth -= damageAmount;
+        knockBack.GetKnockedBack(hitTransform,knockBackThrustAmount);  
         StartCoroutine(DamageRecoveryRoutine());
-        CheckIfPlayerDeath();
+        // CheckIfPlayerDeath();
     }
 
     private void CheckIfPlayerDeath()

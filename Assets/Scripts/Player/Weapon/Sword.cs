@@ -9,7 +9,7 @@ public class Sword : MonoBehaviour, IWeapon
     [SerializeField] private Transform activeWeapon;
     [SerializeField] private Collider2D weaponCollide;
 
-    [SerializeField] private Player player;
+    [SerializeField] private PlayerController playerController;
     [SerializeField] private PlayerHealth playerHealth;
     [SerializeField] private Damager damager;
 
@@ -61,7 +61,7 @@ public class Sword : MonoBehaviour, IWeapon
         if (Input.GetMouseButtonDown(0) && _attackCooldonwTimer > attackRate)
         {
             animator.SetTrigger(_attackHash);
-            _slash = Instantiate(slashAnimPrefab, slashAnimSpawnPoint.position, player.transform.rotation);
+            _slash = Instantiate(slashAnimPrefab, slashAnimSpawnPoint.position, playerController.transform.rotation);
             _slash.transform.parent = this.transform.parent;
             weaponCollide.gameObject.SetActive(true);
             _attackCooldonwTimer = 0;
@@ -87,8 +87,8 @@ public class Sword : MonoBehaviour, IWeapon
     private void MouseFollowWithOffset()
     {
         var mousePosition = Input.mousePosition;
-        var playerScreenPoint = _mainCamera.WorldToScreenPoint(player.transform.position);
-        var playerPosition = player.transform.position;
+        var playerScreenPoint = _mainCamera.WorldToScreenPoint(playerController.transform.position);
+        var playerPosition = playerController.transform.position;
 
         var angle = Mathf.Atan2(mousePosition.y - playerPosition.y, Mathf.Abs(mousePosition.x - playerPosition.x)) *
                     Mathf.Rad2Deg;

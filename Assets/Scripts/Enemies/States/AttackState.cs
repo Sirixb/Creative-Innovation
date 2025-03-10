@@ -13,12 +13,12 @@ public class AttackState : IEnemyState
 
     public void Update()
     {
+        // Debug.Log("Atacando");
         _enemyState.SetPosition(Vector2.zero);
 
         if (!_enemyState.CanAttack())
             return;
 
-            // Debug.Log("Atacando");
         if (_enemyState.PlayerInRange())
             CallAttack();
         else if (_enemyState.PlayerInSight())
