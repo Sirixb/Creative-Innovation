@@ -16,7 +16,10 @@ public class PlayerController : MonoBehaviour
 
 
     [SerializeField] private float speed;
+    public float Speed { get => speed; set => speed = value; }
     public bool FacingLeft { get; private set; }
+
+
     private Vector2 _movement;
 
     private Camera _mainCamera;
@@ -59,7 +62,7 @@ public class PlayerController : MonoBehaviour
     {
         _movement = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         if (_movement != Vector2.zero) _movement.Normalize();
-        rb.MovePosition(rb.position + _movement * (speed * Time.deltaTime));
+        rb.MovePosition(rb.position + _movement * (Speed * Time.deltaTime));
     }
 
     private void FacingDirection()
