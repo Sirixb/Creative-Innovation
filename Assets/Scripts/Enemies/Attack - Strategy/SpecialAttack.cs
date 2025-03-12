@@ -94,9 +94,9 @@ public class SpecialAttack : AttackStrategy
         collider2d.enabled = false;
     }
 
-    private void ChangeAttackAtributtes(float damage, float rate, float range)
+    private void ChangeAttackAtributtes(int damage, float rate, float range)
     {
-        damage = damage;
+        this.damage = damage;
         attackRate = rate;
         attackRange = range;
     }
@@ -108,6 +108,6 @@ public class SpecialAttack : AttackStrategy
     }
     private void OnDisable()
     {
-        enemyHealth.OnEnemyDie += DestroySpawnedEnemies;
+        enemyHealth.OnEnemyDie -= DestroySpawnedEnemies;
     }
 }

@@ -19,7 +19,7 @@ public class Sword : MonoBehaviour, IWeapon
     [Header("Weapon Info")]
     [SerializeField] private int damage = 50;
     [SerializeField] private float attackRate = 1f;
-    [SerializeField] private float attackRange = 2f;
+    // [SerializeField] private float attackRange = 2f;
     private bool IsAttack { get; set; } = false;
 
     private Camera _mainCamera;

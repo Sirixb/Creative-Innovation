@@ -8,15 +8,20 @@ public abstract class Health : MonoBehaviour
     [SerializeField] protected Animator animator;
     [SerializeField] protected KnockBack knockBack;
     [SerializeField] protected Flash flash;
+    [SerializeField] protected int maxHealth = 100;
     [SerializeField] protected int currentHealth = 100;
     [SerializeField] protected bool canTakeDamage = true;
     [SerializeField] protected float invulnerabilityRecoveryTime = 1f;
     [SerializeField] protected float knockBackThrustAmount = 10f;
     
     protected bool IsDeath = false;
-     
-    
-    public void TakeDamage(int damageAmount, Transform hitTransform)
+
+    private void Start()
+    {
+        currentHealth = maxHealth;
+    }
+
+    public virtual void TakeDamage(int damageAmount, Transform hitTransform)
     {
         if (IsDeath || !canTakeDamage)
         {
