@@ -1,9 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : Character
 {
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Animator animator;
@@ -12,6 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private CapsuleCollider2D capsuleCollider2D;
     [SerializeField] private Collider2D collider2d;
     [SerializeField] private KnockBack knockBack;
+    [SerializeField] private CinemachineVirtualCamera cinemachineVirtualCamera;
     private IWeapon _weapon;
 
 
@@ -30,6 +32,7 @@ public class PlayerController : MonoBehaviour
     {
         _mainCamera = Camera.main;
         _weapon = GetComponentInChildren<IWeapon>();
+         FindObjectOfType<CinemachineVirtualCamera>().m_Follow = transform;
     }
     private void OnEnable()
     {

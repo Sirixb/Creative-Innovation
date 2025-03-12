@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class EnemyState : MonoBehaviour
+public class EnemyState : Character
 {
     private Rigidbody2D _rb;
     private CapsuleCollider2D _capsuleCollider2D;

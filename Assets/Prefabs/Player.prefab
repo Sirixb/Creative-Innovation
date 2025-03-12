@@ -402,7 +402,7 @@ MonoBehaviour:
   damager: {fileID: 0}
   slashAnimSpawnPoint: {fileID: 4514286681892836975}
   slashAnimPrefab: {fileID: 1182723804837960775, guid: d11fb36010c47994b80ae846c5783d96, type: 3}
-  damage: 10
+  damage: 35
   attackRate: 0.5
   attackRange: 2
 --- !u!95 &7390052610681042032
