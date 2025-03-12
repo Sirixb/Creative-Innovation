@@ -5,8 +5,9 @@ public class RangeAttack : AttackStrategy
     [SerializeField] private GameObject arrowPrefab;
     [SerializeField] private Transform firePoint;
     [SerializeField] private float arrowSpeed = 5f;
+    
 
-    public override void Attack(Transform attacker, Transform target, Collider2D collider2d)
+    public override void Attack(Transform attacker, Transform target)
     {
         Vector2 direction = (target.position - firePoint.position).normalized;
         var lance = Instantiate(arrowPrefab, firePoint.position, Quaternion.identity);

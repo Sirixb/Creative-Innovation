@@ -3,15 +3,14 @@ using UnityEngine;
 
 public class MeleeAttack : AttackStrategy
 {
-    private Collider2D _collider2D;
-    public override void Attack(Transform attacker, Transform target, Collider2D collider2d)
+    [SerializeField] private Collider2D collider2d;
+    public override void Attack(Transform attacker, Transform target)
     {
-        _collider2D = collider2d;
-        _collider2D.enabled = true;
+        collider2d.enabled = true;
     }
     public void DoneAttackingAnimEvent()
     {
-        _collider2D.enabled = false;
+        collider2d.enabled = false;
     }
     private void OnTriggerEnter2D(Collider2D other)
     {

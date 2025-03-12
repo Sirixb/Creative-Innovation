@@ -24,8 +24,8 @@ public class Spawner : MonoBehaviour
         }
     }
 
-    public void Spawn(string spawnDataCharacterId, Vector3 spawnPositionPosition)
+    public GameObject Spawn(string spawnDataCharacterId, Vector3 spawnPositionPosition)
     {
-        characterFactory.CreateCharacter(spawnDataCharacterId, spawnPositionPosition);
+        return characterFactory.CreateCharacter(spawnDataCharacterId, spawnPositionPosition);
     }
 }

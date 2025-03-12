@@ -8,8 +8,11 @@ public class SpecialAttack : AttackStrategy
 {
     [SerializeField] private GameObject arrowPrefab;
     [SerializeField] private Transform firePoint;
+    [SerializeField] private Collider2D collider2d;
+    [SerializeField] private EnemyHealth enemyHealth;
     [SerializeField] private float arrowSpeed = 5f;
-    [SerializeField] private Transform target;
+    [SerializeField] private float timeToFinishMeleeAttack = .5f;
+    private Transform _target;
 
     [Serializable]
     private struct SpawnData
@@ -19,14 +22,25 @@ public class SpecialAttack : AttackStrategy
     }
 
     [SerializeField] private List<SpawnData> spawnList;
-    [SerializeField] private float timeToFinish = .5f;
-    [SerializeField] private static Collider2D _collider2D;
+    [SerializeField] private List<GameObject> enemySpawnedList;
 
-
-    public override void Attack(Transform attacker, Transform target, Collider2D collider2d)
+    private void OnEnable()
     {
-        this.target = target;
-        _collider2D = collider2d;
+        enemyHealth.OnEnemyDie += DestroySpawnedEnemies;
+    }
+
+    private void DestroySpawnedEnemies()
+    {
+        foreach (var enemy in enemySpawnedList)
+        {
+            var damageByBossDie = 300;
+            enemy.GetComponent<EnemyHealth>().TakeDamage(damageByBossDie,transform);
+        }
+    }
+
+    public override void Attack(Transform attacker, Transform target)
+    {
+        this._target = target;
         var randomValue = Random.value;
         if (randomValue >= 0.9f)
         {
@@ -34,8 +48,7 @@ public class SpecialAttack : AttackStrategy
             return;
         }
 
-        /*else*/
-        if (attackRange > 10 /*randomValue is > .4f and < 0.9f*/)
+        if (attackRange > 10)
         {
             RangeAttack();
         }
@@ -51,14 +64,15 @@ public class SpecialAttack : AttackStrategy
         var spawner = FindObjectOfType<Spawner>();
         foreach (var spawnData in spawnList)
         {
-            spawner.Spawn(spawnData.characterId, (Vector2)transform.position + Random.insideUnitCircle);
+            var enemySpawned = spawner.Spawn(spawnData.characterId, (Vector2)transform.position + Random.insideUnitCircle);
+            enemySpawnedList.Add(enemySpawned);
         }
     }
 
     private void RangeAttack()
     {
         ChangeAttackAtributtes(damage: 15, rate: 2f, range: 1);
-        Vector2 direction = (target.position - firePoint.position).normalized;
+        Vector2 direction = (_target.position - firePoint.position).normalized;
         var lance = Instantiate(arrowPrefab, firePoint.position, Quaternion.identity);
         lance.GetComponent<Lance>().Damage = Damage;
         lance.GetComponent<Rigidbody2D>().velocity = direction * arrowSpeed;
@@ -70,14 +84,14 @@ public class SpecialAttack : AttackStrategy
     private void MeleeAttack()
     {
         ChangeAttackAtributtes(damage: 30, rate: 1.2f, range: 13f);
-        _collider2D.enabled = true;
+        collider2d.enabled = true;
         StartCoroutine(FinishMeleeAttack());
     }
 
     private IEnumerator FinishMeleeAttack()
     {
-        yield return new WaitForSeconds(timeToFinish);
-        _collider2D.enabled = false;
+        yield return new WaitForSeconds(timeToFinishMeleeAttack);
+        collider2d.enabled = false;
     }
 
     private void ChangeAttackAtributtes(float damage, float rate, float range)
@@ -91,5 +105,9 @@ public class SpecialAttack : AttackStrategy
     {
         var playerHealth = other.gameObject.GetComponent<PlayerHealth>();
         playerHealth?.TakeDamage(damage, transform);
+    }
+    private void OnDisable()
+    {
+        enemyHealth.OnEnemyDie += DestroySpawnedEnemies;
     }
 }

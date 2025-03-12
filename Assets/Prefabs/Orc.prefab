@@ -275,6 +275,7 @@ MonoBehaviour:
   damage: 20
   attackRange: 1
   attackRate: 1.2
+  collider2d: {fileID: 8222544140759288664}
 --- !u!114 &699791242279078083
 MonoBehaviour:
   m_ObjectHideFlags: 0

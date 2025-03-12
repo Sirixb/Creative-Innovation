@@ -754,6 +754,7 @@ MonoBehaviour:
   capsuleCollider2D: {fileID: 8155541421187330980}
   collider2d: {fileID: 7247183045681911444}
   knockBack: {fileID: 8327619843242226338}
+  cinemachineVirtualCamera: {fileID: 0}
   speed: 4
 --- !u!114 &8494582047075401039
 MonoBehaviour:

@@ -169,7 +169,7 @@ public class EnemyState : Character
     public void Attack()
     {
         SetRotation(GetDirectionToPlayer().x);
-        _attackStrategy?.Attack(transform, _playerController.transform, _collider2D);
+        _attackStrategy?.Attack(transform, _playerController.transform);
     }
 
     public bool CanAttack()
