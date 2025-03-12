@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: OrcBoss Animator Override Controller
+  m_Controller: {fileID: 9100000, guid: 8162437d6ec9b244ab5a4c6923c95728, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: ebcfa7dc82b452849981361501fba835, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: ebcfa7dc82b452849981361501fba835, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 5841a276f18eb394a8c0bfb391e5ff34, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 5841a276f18eb394a8c0bfb391e5ff34, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: a088032f87af9234493dc9e07c82556d, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: a088032f87af9234493dc9e07c82556d, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: e8d0a2e1d73fc1443b38a899f64b286a, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: e8d0a2e1d73fc1443b38a899f64b286a, type: 2}
