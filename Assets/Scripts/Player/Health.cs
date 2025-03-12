@@ -13,13 +13,8 @@ public abstract class Health : MonoBehaviour
     [SerializeField] protected bool canTakeDamage = true;
     [SerializeField] protected float invulnerabilityRecoveryTime = 1f;
     [SerializeField] protected float knockBackThrustAmount = 10f;
-    
-    protected bool IsDeath = false;
+    public bool IsDeath { get; private set; } = false;
 
-    private void Start()
-    {
-        currentHealth = maxHealth;
-    }
 
     public virtual void TakeDamage(int damageAmount, Transform hitTransform)
     {

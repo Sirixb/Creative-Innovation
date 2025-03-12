@@ -7,10 +7,11 @@ public class GameController : MonoBehaviour
 {
     [SerializeField] private UIFade uiFade;
     [SerializeField] private PlayerHealth playerHealth;
+    [SerializeField] private PlayerController playerController;
     [SerializeField] private EnemyHealth bossEnemyHealth;
     [SerializeField] private float waitToLoadTime = 1f;
 
- public void Start()
+    public void Start()
     {
         playerHealth = GameObject.FindWithTag("Player").GetComponent<PlayerHealth>();
         playerHealth.OnPlayerDie += GameOver;
@@ -20,29 +21,47 @@ public class GameController : MonoBehaviour
 
     private void GameWin()
     {
+        StartCoroutine(CheckPlayerDeathBeforeWin());
+    }
+
+    private IEnumerator CheckPlayerDeathBeforeWin()
+    {
+        yield return new WaitForSeconds(1.5f);
+
+        if (playerHealth.IsDeath)
+        {
+            yield break;
+        }
+
+        uiFade.GameWinCanvasGroup.gameObject.SetActive(true);
         uiFade.FadeToPanel(uiFade.GameWinCanvasGroup, targetAlpha: 1);
+        playerHealth.gameObject.GetComponent<PlayerController>().DisableComponentsOnPlayerDie();
     }
 
     private void GameOver()
     {
+        uiFade.GameOverCanvasGroup.gameObject.SetActive(true);
         uiFade.FadeToPanel(uiFade.GameOverCanvasGroup, targetAlpha: 1);
     }
 
-    private void CleanPanel()
-    {
-        uiFade.FadeToPanel(uiFade.GameWinCanvasGroup, targetAlpha: 0);
-        uiFade.FadeToPanel(uiFade.GameOverCanvasGroup, targetAlpha: 0);
-    }
     public void Restart()
     {
-        CleanPanel();
-        StartCoroutine(LoadSceneRoutine(sceneToLoad:1));
+        FadeOffPanel();
+        StartCoroutine(LoadSceneRoutine(sceneToLoad: 1));
     }
 
     public void MainMenu()
     {
-        CleanPanel();
-        StartCoroutine(LoadSceneRoutine(sceneToLoad:0));
+        FadeOffPanel();
+        StartCoroutine(LoadSceneRoutine(sceneToLoad: 0));
+    }
+
+    private void FadeOffPanel()
+    {
+        uiFade.GameWinCanvasGroup.interactable = false;
+        uiFade.GameOverCanvasGroup.interactable = false;
+        uiFade.FadeToPanel(uiFade.GameWinCanvasGroup, targetAlpha: 0);
+        uiFade.FadeToPanel(uiFade.GameOverCanvasGroup, targetAlpha: 0);
     }
 
     private IEnumerator LoadSceneRoutine(int sceneToLoad)

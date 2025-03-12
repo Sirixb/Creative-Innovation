@@ -9,6 +9,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 699791242279078083, guid: d6a7be5a7c7c717468afe1688366aed1, type: 3}
+      propertyPath: maxHealth
+      value: 350
+      objectReference: {fileID: 0}
+    - target: {fileID: 699791242279078083, guid: d6a7be5a7c7c717468afe1688366aed1, type: 3}
       propertyPath: currentHealth
       value: 350
       objectReference: {fileID: 0}
@@ -26,11 +30,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3806650075162476668, guid: d6a7be5a7c7c717468afe1688366aed1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.3
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 3806650075162476668, guid: d6a7be5a7c7c717468afe1688366aed1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.3
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 3806650075162476668, guid: d6a7be5a7c7c717468afe1688366aed1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -123,7 +127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 30
-  attackRange: 10
+  attackRange: 13
   attackRate: 1.2
   arrowPrefab: {fileID: 3205707660741638017, guid: bd145814ce27d4946a03b9dcdd37076a, type: 3}
   firePoint: {fileID: 5624323122148744432}

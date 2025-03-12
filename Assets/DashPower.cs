@@ -7,8 +7,7 @@ public class DashPower : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D other)
     {
-        var dash = other.gameObject.GetComponent<Dash>();
-        if (dash == null) return;
+        if (!other.TryGetComponent(out Dash dash)) return;
         dash.enabled = true;
         Destroy(gameObject);
     }

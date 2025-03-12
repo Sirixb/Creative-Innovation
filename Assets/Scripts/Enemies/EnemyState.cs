@@ -65,7 +65,8 @@ public class EnemyState : Character
 
     private void OnPlayerDie()
     {
-        ChangeState(new IdleState());
+        if (!_enemyHealth.IsDeath)
+            ChangeState(new IdleState());
     }
 
     private void OnEnemyDie()
@@ -74,7 +75,7 @@ public class EnemyState : Character
         _capsuleCollider2D.enabled = false;
         _collider2D.enabled = false;
     }
-    
+
     private void Start()
     {
         ChangeState(new IdleState());
@@ -82,7 +83,11 @@ public class EnemyState : Character
 
     private void Update()
     {
-        if(_knockBack.GettingKnockedBack){return;}
+        if (_knockBack.GettingKnockedBack)
+        {
+            return;
+        }
+
         _currentState?.Update();
     }
 
@@ -112,7 +117,7 @@ public class EnemyState : Character
         _results.Clear();
         var target = GetDirectionToPlayer();
         Debug.DrawRay(viewPosition.position, target * viewDistance, Color.red);
-        
+
         var hitCount = Physics2D.Raycast(viewPosition.position, target, contactFilter, _results, viewDistance);
         for (var i = 0; i < hitCount; i++)
         {
@@ -121,6 +126,7 @@ public class EnemyState : Character
             isPlayerInSight = true;
             break;
         }
+
         return isPlayerInSight;
     }
 
@@ -157,7 +163,7 @@ public class EnemyState : Character
 
     public void SetAnimation(string parameter)
     {
-        _animator.Play(parameter, layer: 0, normalizedTime: 0);
+        _animator?.Play(parameter, layer: 0, normalizedTime: 0);
     }
 
     public void SetRotation(float direction)

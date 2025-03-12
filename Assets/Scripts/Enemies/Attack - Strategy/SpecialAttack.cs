@@ -34,8 +34,10 @@ public class SpecialAttack : AttackStrategy
         foreach (var enemy in enemySpawnedList)
         {
             var damageByBossDie = 300;
-            enemy.GetComponent<EnemyHealth>().TakeDamage(damageByBossDie,transform);
+            enemy.GetComponent<EnemyHealth>()?.TakeDamage(damageByBossDie,transform);
         }
+        
+        enemySpawnedList.RemoveAll(e => e == null);
     }
 
     public override void Attack(Transform attacker, Transform target)
@@ -60,7 +62,7 @@ public class SpecialAttack : AttackStrategy
 
     private void CreateOrcs()
     {
-        ChangeAttackAtributtes(damage: 15, rate: 8, range: 5);
+        ChangeAttackAtributtes(damage: 15, rate: 8, range: 6);
         var spawner = FindObjectOfType<Spawner>();
         foreach (var spawnData in spawnList)
         {
@@ -71,7 +73,7 @@ public class SpecialAttack : AttackStrategy
 
     private void RangeAttack()
     {
-        ChangeAttackAtributtes(damage: 15, rate: 2f, range: 1);
+        ChangeAttackAtributtes(damage: 15, rate: 2f, range: 1.3f);
         Vector2 direction = (_target.position - firePoint.position).normalized;
         var lance = Instantiate(arrowPrefab, firePoint.position, Quaternion.identity);
         lance.GetComponent<Lance>().Damage = Damage;

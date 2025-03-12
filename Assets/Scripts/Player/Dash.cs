@@ -34,7 +34,8 @@ public class Dash : MonoBehaviour
         if (_isDashing) return;
         _isDashing = true;
         playerController.Speed *= dashSpeed;
-        trailRenderer.emitting = true;
+        if (trailRenderer)
+            trailRenderer.emitting = true;
         StartCoroutine(EndDashRoutine());
     }
 
@@ -42,7 +43,8 @@ public class Dash : MonoBehaviour
     {
         yield return new WaitForSeconds(dashTime);
         playerController.Speed = _startingMoveSpeed;
-        trailRenderer.emitting = false;
+        if (trailRenderer)
+            trailRenderer.emitting = false;
         yield return new WaitForSeconds(dashCoolDown);
         _isDashing = false;
     }

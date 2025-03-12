@@ -21,8 +21,17 @@ public class UIFade : MonoBehaviour
 
     public void Start()
     {
-        // gameOverCanvasGroup.alpha = 0;
-        // gameWinCanvasGroup.alpha= 0;
+        DisablePanels();
+    }
+
+    private void DisablePanels()
+    {
+        gameOverCanvasGroup.alpha = 0;
+        gameWinCanvasGroup.alpha= 0;
+        GameOverCanvasGroup.interactable = false;
+        GameWinCanvasGroup.interactable = false;
+        gameOverCanvasGroup.gameObject.SetActive(false);
+        GameWinCanvasGroup.gameObject.SetActive(false);
     }
 
     public void FadeToBlack()
@@ -69,6 +78,7 @@ public class UIFade : MonoBehaviour
         {
             var alpha = Mathf.MoveTowards(canvasGroup.alpha, targetAlpha, fadeSpeed * Time.deltaTime);
             canvasGroup.alpha =  alpha;
+            canvasGroup.interactable = alpha >= 1f;
             yield return null;
         }
     }

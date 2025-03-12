@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 699791242279078083, guid: d6a7be5a7c7c717468afe1688366aed1, type: 3}
       propertyPath: currentHealth
-      value: 120
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 2398925202034619251, guid: d6a7be5a7c7c717468afe1688366aed1, type: 3}
       propertyPath: viewDistance

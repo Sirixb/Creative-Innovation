@@ -42,7 +42,7 @@ public class PlayerController : Character
         }
     }
 
-    private void DisableComponentsOnPlayerDie()
+    public void DisableComponentsOnPlayerDie()
     {
         _weapon.DisableWeapon();
         capsuleCollider2D.enabled = false;
