@@ -13,7 +13,6 @@ public class PlayerController : Character
     [SerializeField] private CapsuleCollider2D capsuleCollider2D;
     [SerializeField] private Collider2D collider2d;
     [SerializeField] private KnockBack knockBack;
-    [SerializeField] private CinemachineVirtualCamera cinemachineVirtualCamera;
     private IWeapon _weapon;
 
 
@@ -32,8 +31,9 @@ public class PlayerController : Character
     {
         _mainCamera = Camera.main;
         _weapon = GetComponentInChildren<IWeapon>();
-         FindObjectOfType<CinemachineVirtualCamera>().m_Follow = transform;
+        FindObjectOfType<CinemachineVirtualCamera>().m_Follow = transform;
     }
+
     private void OnEnable()
     {
         if (playerHealth != null)
@@ -42,16 +42,13 @@ public class PlayerController : Character
         }
     }
 
-    public void DisableComponentsOnPlayerDie()
-    {
-        _weapon.DisableWeapon();
-        capsuleCollider2D.enabled = false;
-        this.enabled = false;
-    }
-
     private void FixedUpdate()
     {
-        if (knockBack.GettingKnockedBack) { return; }
+        if (knockBack.GettingKnockedBack)
+        {
+            return;
+        }
+
         Move();
     }
 
@@ -85,11 +82,19 @@ public class PlayerController : Character
         }
     }
 
+    public void DisableComponentsOnPlayerDie()
+    {
+        _weapon.DisableWeapon();
+        capsuleCollider2D.enabled = false;
+        this.enabled = false;
+    }
+
     private void Animation()
     {
         var move = Math.Abs(_movement.x) + Math.Abs(_movement.y);
         animator.SetFloat(_runHash, move);
     }
+
     private void OnDisable()
     {
         playerHealth.OnPlayerDie -= DisableComponentsOnPlayerDie;

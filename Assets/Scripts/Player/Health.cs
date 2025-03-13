@@ -22,21 +22,33 @@ public abstract class Health : MonoBehaviour
         {
             return;
         }
-    
+
         canTakeDamage = false;
         currentHealth -= damageAmount;
-        knockBack.GetKnockedBack(hitTransform,knockBackThrustAmount);  
+        knockBack.GetKnockedBack(hitTransform, knockBackThrustAmount);
         StartCoroutine(flash.FlashRoutine());
         StartCoroutine(DamageRecoveryRoutine());
         CheckIfDeath();
     }
+
+    public virtual void RestoreHealth(int damageAmount)
+    {
+        if (IsDeath)
+        {
+            return;
+        }
+        currentHealth += damageAmount;
+        if (currentHealth >= 100)
+            currentHealth = 100;
+    }
+
     protected virtual void CheckIfDeath()
     {
         if (currentHealth > 0 || IsDeath) return;
         IsDeath = true;
         currentHealth = 0;
     }
-    
+
     private IEnumerator DamageRecoveryRoutine()
     {
         yield return new WaitForSeconds(invulnerabilityRecoveryTime);
