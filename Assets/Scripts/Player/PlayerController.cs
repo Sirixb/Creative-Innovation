@@ -87,6 +87,7 @@ public class PlayerController : Character
         _weapon.DisableWeapon();
         capsuleCollider2D.enabled = false;
         this.enabled = false;
+        animator.SetFloat(_runHash, 0f);
     }
 
     private void Animation()

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -81,7 +82,7 @@ public class EnemyState : Character
         ChangeState(new IdleState());
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (_knockBack.GettingKnockedBack)
         {
@@ -119,12 +120,11 @@ public class EnemyState : Character
         Debug.DrawRay(viewPosition.position, target * viewDistance, Color.red);
 
         var hitCount = Physics2D.Raycast(viewPosition.position, target, contactFilter, _results, viewDistance);
-        for (var i = 0; i < hitCount; i++)
+        if (hitCount <= 0) return isPlayerInSight;
+        // Debug.Log(_results[0].transform.name);
+        if (_results[0].collider.CompareTag("Player"))
         {
-            // Debug.Log(_results[i].transform.name);
-            if (!_results[i].collider.CompareTag("Player")) continue;
             isPlayerInSight = true;
-            break;
         }
 
         return isPlayerInSight;
@@ -168,8 +168,8 @@ public class EnemyState : Character
 
     public void SetRotation(float direction)
     {
-        var localScale = direction >= 0 ? 1 : -1;
-        transform.localScale = new Vector3(localScale, 1, 1);
+        var localScale = direction >= 0 ? MathF.Abs(transform.localScale.x) : -MathF.Abs(transform.localScale.x);
+        transform.localScale = new Vector3(localScale, transform.localScale.y, 1);
     }
 
     public void Attack()

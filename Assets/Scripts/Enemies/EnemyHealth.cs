@@ -7,6 +7,7 @@ using Object = UnityEngine.Object;
 public class EnemyHealth : Health
 {
     [SerializeField] private GameObject deathZombieVFXPrefab;
+    [SerializeField] private DropConsumable dropConsumable;
     
     [Header("Damage ")]
     [SerializeField] private int damageByContact = 10;
@@ -27,6 +28,7 @@ public class EnemyHealth : Health
     public void DeathEnemyVFX()
     {
         Instantiate(deathZombieVFXPrefab, transform.position, Quaternion.identity);
+        dropConsumable.DropItems();
         Destroy(gameObject);
     }
 }

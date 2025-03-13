@@ -9,15 +9,15 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Obtacles
+  - Obstacle
   - Water
   - UI
   - Player
   - CinemachineConfiner
-  - 
-  - 
-  - 
-  - 
+  - Enemy
+  - EnemyWeapons
+  - PowerSkill
+  - Consumables
   - 
   - 
   - 

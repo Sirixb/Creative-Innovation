@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
 public class SpecialAttack : AttackStrategy
@@ -21,23 +22,14 @@ public class SpecialAttack : AttackStrategy
         public Transform spawnPosition;
     }
 
+    [SerializeField] private GameObject magicBornPrefab;
     [SerializeField] private List<SpawnData> spawnList;
     [SerializeField] private List<GameObject> enemySpawnedList;
+    private int damageByBossDie = 300;
 
     private void OnEnable()
     {
         enemyHealth.OnEnemyDie += DestroySpawnedEnemies;
-    }
-
-    private void DestroySpawnedEnemies()
-    {
-        foreach (var enemy in enemySpawnedList)
-        {
-            var damageByBossDie = 300;
-            enemy.GetComponent<EnemyHealth>()?.TakeDamage(damageByBossDie,transform);
-        }
-        
-        enemySpawnedList.RemoveAll(e => e == null);
     }
 
     public override void Attack(Transform attacker, Transform target)
@@ -50,7 +42,8 @@ public class SpecialAttack : AttackStrategy
             return;
         }
 
-        if (attackRange > 10)
+        const int attackBasedOnRangePredefined = 5;
+        if (attackRange > attackBasedOnRangePredefined)
         {
             RangeAttack();
         }
@@ -62,18 +55,21 @@ public class SpecialAttack : AttackStrategy
 
     private void CreateOrcs()
     {
-        ChangeAttackAtributtes(damage: 15, rate: 8, range: 6);
+        ChangeAttackAtributtes(damage: 15, range: 6, rate: 8 );
         var spawner = FindObjectOfType<Spawner>();
         foreach (var spawnData in spawnList)
         {
-            var enemySpawned = spawner.Spawn(spawnData.characterId, (Vector2)transform.position + Random.insideUnitCircle);
+            var position = (Vector2)transform.position;
+            var insideUnitCircle = Random.insideUnitCircle;
+            var enemySpawned = spawner.Spawn(spawnData.characterId, position  + insideUnitCircle);
+            Instantiate(magicBornPrefab,position + insideUnitCircle,Quaternion.identity);
             enemySpawnedList.Add(enemySpawned);
         }
     }
 
     private void RangeAttack()
     {
-        ChangeAttackAtributtes(damage: 15, rate: 2f, range: 1.3f);
+        ChangeAttackAtributtes(damage: 15, range: 1.3f, rate: 2f);
         Vector2 direction = (_target.position - firePoint.position).normalized;
         var lance = Instantiate(arrowPrefab, firePoint.position, Quaternion.identity);
         lance.GetComponent<Lance>().Damage = Damage;
@@ -85,7 +81,7 @@ public class SpecialAttack : AttackStrategy
 
     private void MeleeAttack()
     {
-        ChangeAttackAtributtes(damage: 30, rate: 1.2f, range: 13f);
+        ChangeAttackAtributtes(damage: 30, range: 10f,rate: 1.2f);
         collider2d.enabled = true;
         StartCoroutine(FinishMeleeAttack());
     }
@@ -96,7 +92,7 @@ public class SpecialAttack : AttackStrategy
         collider2d.enabled = false;
     }
 
-    private void ChangeAttackAtributtes(int damage, float rate, float range)
+    private void ChangeAttackAtributtes(int damage, float range, float rate)
     {
         this.damage = damage;
         attackRate = rate;
@@ -107,6 +103,21 @@ public class SpecialAttack : AttackStrategy
     {
         var playerHealth = other.gameObject.GetComponent<PlayerHealth>();
         playerHealth?.TakeDamage(damage, transform);
+    }
+    private void DestroySpawnedEnemies()
+    {
+        for (var i = enemySpawnedList.Count - 1; i >= 0; i--)
+        {
+            if (enemySpawnedList[i] != null)
+            {
+                enemySpawnedList[i].GetComponent<EnemyHealth>()?.TakeDamage(damageByBossDie, transform);
+            }
+
+            if (enemySpawnedList[i] == null)
+            {
+                enemySpawnedList.RemoveAt(i);
+            }
+        }
     }
     private void OnDisable()
     {

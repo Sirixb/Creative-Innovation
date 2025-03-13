@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8882506288570626195}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Hands
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -52,7 +52,8 @@ GameObject:
   - component: {fileID: 699791242279078083}
   - component: {fileID: 8502719514784131523}
   - component: {fileID: 1525871865240604748}
-  m_Layer: 0
+  - component: {fileID: 7007499775413430110}
+  m_Layer: 8
   m_Name: Orc
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -241,12 +242,12 @@ MonoBehaviour:
   patrolSpeed: 2
   minPatrolTime: 1
   maxPatrolTime: 2
-  chaseSpeed: 7
+  chaseSpeed: 4.5
   viewPosition: {fileID: 2269267195334766913}
-  viewDistance: 3
+  viewDistance: 5
   contactFilter:
     useTriggers: 0
-    useLayerMask: 0
+    useLayerMask: 1
     useDepth: 0
     useOutsideDepth: 0
     useNormalAngle: 0
@@ -291,11 +292,13 @@ MonoBehaviour:
   animator: {fileID: 8644921011852193297}
   knockBack: {fileID: 8502719514784131523}
   flash: {fileID: 1525871865240604748}
+  maxHealth: 100
   currentHealth: 100
   canTakeDamage: 1
   invulnerabilityRecoveryTime: 0.4
   knockBackThrustAmount: 10
   deathZombieVFXPrefab: {fileID: 5243032396917922483, guid: 856af2b135dcd324497824576fb6ca46, type: 3}
+  dropConsumable: {fileID: 7007499775413430110}
   damageByContact: 10
 --- !u!114 &8502719514784131523
 MonoBehaviour:
@@ -325,6 +328,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   whiteFlashMaterial: {fileID: 2100000, guid: c11f03e19d96eaa4bbf34f44ef927e02, type: 2}
   restoreDefaultMaterialTime: 0.2
+--- !u!114 &7007499775413430110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4597364628815580452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b942af37acc4eae8f928070d3e6e54e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  goldCoin: {fileID: 1195770926446703609, guid: 67af4d78a74f7d54bbecbfd83aa23218, type: 3}
+  healthGlobe: {fileID: 1195770926446703609, guid: bcc86ad5166307648ac9690354654735, type: 3}
+  audioClips: []
 --- !u!1 &4755182255672539415
 GameObject:
   m_ObjectHideFlags: 0
@@ -335,7 +353,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1445435357388449206}
   - component: {fileID: 3555422852265255811}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Hands 10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -419,7 +437,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3715595649100890308}
   - component: {fileID: 4167377818769694252}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Hands 11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -503,7 +521,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7091161861206425915}
   - component: {fileID: 8222544140759288664}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Range Attack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -569,7 +587,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2269267195334766913}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Vision
   m_TagString: Untagged
   m_Icon: {fileID: 0}

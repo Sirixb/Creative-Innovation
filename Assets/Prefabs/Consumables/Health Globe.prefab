@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3037733926651211213}
   - component: {fileID: -7485877954664873289}
   - component: {fileID: -2451455875908639891}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Health Globe
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -22,11 +22,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2398925202034619251, guid: d6a7be5a7c7c717468afe1688366aed1, type: 3}
       propertyPath: chaseSpeed
-      value: 8
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2398925202034619251, guid: d6a7be5a7c7c717468afe1688366aed1, type: 3}
       propertyPath: viewDistance
-      value: 15
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 3806650075162476668, guid: d6a7be5a7c7c717468afe1688366aed1, type: 3}
       propertyPath: m_LocalScale.x
@@ -54,15 +54,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3806650075162476668, guid: d6a7be5a7c7c717468afe1688366aed1, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 3806650075162476668, guid: d6a7be5a7c7c717468afe1688366aed1, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 3806650075162476668, guid: d6a7be5a7c7c717468afe1688366aed1, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 3806650075162476668, guid: d6a7be5a7c7c717468afe1688366aed1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -108,6 +108,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4597364628815580452, guid: d6a7be5a7c7c717468afe1688366aed1, type: 3}
       insertIndex: 7
       addedObject: {fileID: 7462984630153257957}
+    - targetCorrespondingSourceObject: {fileID: 4597364628815580452, guid: d6a7be5a7c7c717468afe1688366aed1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -5045297087303117977}
   m_SourcePrefab: {fileID: 100100000, guid: d6a7be5a7c7c717468afe1688366aed1, type: 3}
 --- !u!1 &1416484291768963311 stripped
 GameObject:
@@ -127,20 +130,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 30
-  attackRange: 13
-  attackRate: 1.2
+  attackRange: 1.3
+  attackRate: 2
   arrowPrefab: {fileID: 3205707660741638017, guid: bd145814ce27d4946a03b9dcdd37076a, type: 3}
   firePoint: {fileID: 5624323122148744432}
   collider2d: {fileID: 6807501328552400531}
   enemyHealth: {fileID: 2725639149826184456}
-  arrowSpeed: 8
+  arrowSpeed: 12
   timeToFinishMeleeAttack: 0.5
+  magicBornPrefab: {fileID: 1586675574162211068, guid: 260044196b90e514bba9f1aafa2735ba, type: 3}
   spawnList:
   - characterId: Orc
     spawnPosition: {fileID: 0}
   - characterId: Orc Rogue
     spawnPosition: {fileID: 0}
   enemySpawnedList: []
+--- !u!114 &-5045297087303117977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1416484291768963311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b942af37acc4eae8f928070d3e6e54e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  goldCoin: {fileID: 0}
+  healthGlobe: {fileID: 0}
+  audioClips: []
 --- !u!114 &2725639149826184456 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 699791242279078083, guid: d6a7be5a7c7c717468afe1688366aed1, type: 3}
