@@ -17,9 +17,21 @@ PrefabInstance:
       value: 350
       objectReference: {fileID: 0}
     - target: {fileID: 699791242279078083, guid: d6a7be5a7c7c717468afe1688366aed1, type: 3}
+      propertyPath: clip.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 699791242279078083, guid: d6a7be5a7c7c717468afe1688366aed1, type: 3}
       propertyPath: damageByContact
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 699791242279078083, guid: d6a7be5a7c7c717468afe1688366aed1, type: 3}
+      propertyPath: clip.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 1963af748346cee4cba206da7f68b64e, type: 3}
+    - target: {fileID: 699791242279078083, guid: d6a7be5a7c7c717468afe1688366aed1, type: 3}
+      propertyPath: clip.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: b85c942e07148634ba9f6fdcd26aca84, type: 3}
     - target: {fileID: 2398925202034619251, guid: d6a7be5a7c7c717468afe1688366aed1, type: 3}
       propertyPath: chaseSpeed
       value: 5
@@ -28,6 +40,18 @@ PrefabInstance:
       propertyPath: viewDistance
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 2398925202034619251, guid: d6a7be5a7c7c717468afe1688366aed1, type: 3}
+      propertyPath: clip.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2398925202034619251, guid: d6a7be5a7c7c717468afe1688366aed1, type: 3}
+      propertyPath: clip.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 3c9130c0c2f0898449992c5b77aa3b29, type: 3}
+    - target: {fileID: 2398925202034619251, guid: d6a7be5a7c7c717468afe1688366aed1, type: 3}
+      propertyPath: clip.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: 850a7079fa3778b4bafeafd98e590a00, type: 3}
     - target: {fileID: 3806650075162476668, guid: d6a7be5a7c7c717468afe1688366aed1, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.5
@@ -139,6 +163,7 @@ MonoBehaviour:
   arrowSpeed: 12
   timeToFinishMeleeAttack: 0.5
   magicBornPrefab: {fileID: 1586675574162211068, guid: 260044196b90e514bba9f1aafa2735ba, type: 3}
+  maxEnemiesSpawned: 6
   spawnList:
   - characterId: Orc
     spawnPosition: {fileID: 0}
@@ -159,7 +184,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   goldCoin: {fileID: 0}
   healthGlobe: {fileID: 0}
-  audioClips: []
+  key: {fileID: 0}
+  hasKey: 0
 --- !u!114 &2725639149826184456 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 699791242279078083, guid: d6a7be5a7c7c717468afe1688366aed1, type: 3}

@@ -137,4 +137,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   goldCoin: {fileID: 0}
   healthGlobe: {fileID: 0}
-  audioClips: []
+  key: {fileID: 0}
+  hasKey: 0

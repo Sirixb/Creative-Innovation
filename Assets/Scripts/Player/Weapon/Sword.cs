@@ -19,7 +19,8 @@ public class Sword : MonoBehaviour, IWeapon
     [Header("Weapon Info")]
     [SerializeField] private int damage = 50;
     [SerializeField] private float attackRate = 1f;
-    // [SerializeField] private float attackRange = 2f;
+    [SerializeField] private AudioClip[] audioClips;
+
     private bool IsAttack { get; set; } = false;
 
     private Camera _mainCamera;
@@ -34,10 +35,6 @@ public class Sword : MonoBehaviour, IWeapon
         animator = GetComponent<Animator>();
         damager = GetComponentInChildren<Damager>(true);
         damager.Config(damage);
-        // player = GetComponent<Player>();
-        // playerHealth = GetComponent<PlayerHealth>();
-        // activeWeapon = GetComponent<Transform>();
-        // weaponCollide = GetComponent<Collider2D>();
         _mainCamera = Camera.main;
     }
 
@@ -65,6 +62,7 @@ public class Sword : MonoBehaviour, IWeapon
             _slash.transform.parent = this.transform.parent;
             weaponCollide.gameObject.SetActive(true);
             _attackCooldonwTimer = 0;
+            ServiceLocator.Get<AudioController>().PlaySFX(audioClips);
         }
     }
 

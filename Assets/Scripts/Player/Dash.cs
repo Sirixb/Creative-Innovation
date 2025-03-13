@@ -9,6 +9,8 @@ public class Dash : MonoBehaviour
     [SerializeField] private float dashSpeed = 4f;
     [SerializeField] private float dashTime = .2f;
     [SerializeField] private float dashCoolDown = .25f;
+    [SerializeField] private AudioClip clip;
+
 
     private float _startingMoveSpeed;
     private bool _isDashing = false;
@@ -33,6 +35,7 @@ public class Dash : MonoBehaviour
     {
         if (_isDashing) return;
         _isDashing = true;
+        ServiceLocator.Get<AudioController>().PlaySFX(clip);
         playerController.Speed *= dashSpeed;
         if (trailRenderer)
             trailRenderer.emitting = true;

@@ -404,6 +404,12 @@ MonoBehaviour:
   slashAnimPrefab: {fileID: 1182723804837960775, guid: d11fb36010c47994b80ae846c5783d96, type: 3}
   damage: 35
   attackRate: 0.5
+  audioClips:
+  - {fileID: 8300000, guid: f1dd9a24b3a880d4bb8e3ffbcadd233c, type: 3}
+  - {fileID: 8300000, guid: 9401ef5f574df21489d43459b71cdb6f, type: 3}
+  - {fileID: 8300000, guid: 5bb4b877f70cee4448244b64407b88d9, type: 3}
+  - {fileID: 8300000, guid: 308276c5c3a246a478943440698f9533, type: 3}
+  - {fileID: 8300000, guid: a862db1e5c8a99843b43ca3e146a212d, type: 3}
 --- !u!95 &7390052610681042032
 Animator:
   serializedVersion: 5
@@ -774,6 +780,10 @@ MonoBehaviour:
   canTakeDamage: 1
   invulnerabilityRecoveryTime: 1
   knockBackThrustAmount: 5
+  clip:
+  - {fileID: 8300000, guid: 1963af748346cee4cba206da7f68b64e, type: 3}
+  - {fileID: 8300000, guid: b85c942e07148634ba9f6fdcd26aca84, type: 3}
+  hasKey: 0
 --- !u!114 &8327619843242226338
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -809,7 +819,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8151828310776085878}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0f4ea9695c2542f090262cca25c33854, type: 3}
   m_Name: 
@@ -819,6 +829,7 @@ MonoBehaviour:
   dashSpeed: 4
   dashTime: 0.2
   dashCoolDown: 0.25
+  clip: {fileID: 8300000, guid: 3688dce9e39ef284d8e8615deeeb1b7d, type: 3}
 --- !u!96 &4952072302165387825
 TrailRenderer:
   serializedVersion: 3

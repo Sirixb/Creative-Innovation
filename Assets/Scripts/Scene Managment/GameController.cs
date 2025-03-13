@@ -17,6 +17,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private Transform chestContainer;
     [SerializeField] private List<DropConsumable> chests;
 
+    [SerializeField] private AudioClip introMusic;
     public void Start()
     {
         _playerHealth = GameObject.FindWithTag("Player").GetComponent<PlayerHealth>();
@@ -28,6 +29,9 @@ public class GameController : MonoBehaviour
         
         var chestSelectTokey = Random.Range(0, chests.Count);
         chests[chestSelectTokey].HasKey = true;
+        
+        var audioManager = ServiceLocator.Get<AudioController>();
+        audioManager?.PlayMusic(introMusic);
     }
 
     private void GameWin()
@@ -58,13 +62,13 @@ public class GameController : MonoBehaviour
     public void Restart()
     {
         FadeOffPanel();
-        StartCoroutine(LoadSceneRoutine(sceneToLoad: 1));
+        StartCoroutine(LoadSceneRoutine(sceneToLoad: 0));
     }
 
-    public void MainMenu()
+    public void Quit()
     {
         FadeOffPanel();
-        StartCoroutine(LoadSceneRoutine(sceneToLoad: 0));
+        Application.Quit();
     }
 
     private void FadeOffPanel()

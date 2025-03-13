@@ -6,6 +6,8 @@ public class Destructible : MonoBehaviour
     [SerializeField] private GameObject particles;
     [SerializeField] private float destroyDelay = 0.2f;
     [SerializeField] private DropConsumable dropConsumable;
+    [SerializeField] private AudioClip[] clip;
+
 
     private void DestroyObject()
     {
@@ -21,6 +23,7 @@ public class Destructible : MonoBehaviour
         if (other.GetComponent<Damager>() != null)
         {
             DestroyObject();
+            ServiceLocator.Get<AudioController>().PlaySFX(clip);
         }
     }
 }

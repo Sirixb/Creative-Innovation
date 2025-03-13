@@ -8,16 +8,15 @@ using UnityEngine.UI;
 public class PlayerHealth : Health
 {
     public event Action OnPlayerDie;
-    
+
     private Slider _healthSlider;
     private TMP_Text _goldText;
     private int _currentGold = 0;
-    
+
     private const string HealthSliderText = "Health Slider";
     private const string CoinAmountText = "Gold Amount Text";
     private readonly int _dieHash = Animator.StringToHash("die");
     [SerializeField] private bool hasKey = false;
-
     public bool HasKey { get => hasKey; set => hasKey = value; }
 
     public void Start()

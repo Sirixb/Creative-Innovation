@@ -261,6 +261,9 @@ MonoBehaviour:
     maxNormalAngle: 0
   isPlayerInSight: 0
   isPlayerInRange: 0
+  clip:
+  - {fileID: 8300000, guid: 3c9130c0c2f0898449992c5b77aa3b29, type: 3}
+  - {fileID: 8300000, guid: 850a7079fa3778b4bafeafd98e590a00, type: 3}
 --- !u!114 &7937536472801235630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -297,6 +300,9 @@ MonoBehaviour:
   canTakeDamage: 1
   invulnerabilityRecoveryTime: 0.4
   knockBackThrustAmount: 10
+  clip:
+  - {fileID: 8300000, guid: 1963af748346cee4cba206da7f68b64e, type: 3}
+  - {fileID: 8300000, guid: b85c942e07148634ba9f6fdcd26aca84, type: 3}
   deathZombieVFXPrefab: {fileID: 5243032396917922483, guid: 856af2b135dcd324497824576fb6ca46, type: 3}
   dropConsumable: {fileID: 7007499775413430110}
   damageByContact: 10
@@ -342,7 +348,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   goldCoin: {fileID: 1195770926446703609, guid: 67af4d78a74f7d54bbecbfd83aa23218, type: 3}
   healthGlobe: {fileID: 1195770926446703609, guid: bcc86ad5166307648ac9690354654735, type: 3}
-  audioClips: []
+  key: {fileID: 0}
+  hasKey: 0
 --- !u!1 &4755182255672539415
 GameObject:
   m_ObjectHideFlags: 0

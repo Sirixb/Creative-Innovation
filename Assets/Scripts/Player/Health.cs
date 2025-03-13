@@ -13,6 +13,8 @@ public abstract class Health : MonoBehaviour
     [SerializeField] protected bool canTakeDamage = true;
     [SerializeField] protected float invulnerabilityRecoveryTime = 1f;
     [SerializeField] protected float knockBackThrustAmount = 10f;
+    [SerializeField] protected AudioClip[] clip;
+
     public bool IsDeath { get; private set; } = false;
 
 
@@ -28,6 +30,7 @@ public abstract class Health : MonoBehaviour
         knockBack.GetKnockedBack(hitTransform, knockBackThrustAmount);
         StartCoroutine(flash.FlashRoutine());
         StartCoroutine(DamageRecoveryRoutine());
+        ServiceLocator.Get<AudioController>().PlaySFX(clip);
         CheckIfDeath();
     }
 

@@ -176,6 +176,9 @@ MonoBehaviour:
   particles: {fileID: 424379817754494966, guid: 9d1b3aac89917af409d6c2af47de022e, type: 3}
   destroyDelay: 0
   dropConsumable: {fileID: 23893689035617584}
+  clip:
+  - {fileID: 8300000, guid: 1963af748346cee4cba206da7f68b64e, type: 3}
+  - {fileID: 8300000, guid: b85c942e07148634ba9f6fdcd26aca84, type: 3}
 --- !u!114 &23893689035617584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -191,5 +194,4 @@ MonoBehaviour:
   goldCoin: {fileID: 1195770926446703609, guid: 67af4d78a74f7d54bbecbfd83aa23218, type: 3}
   healthGlobe: {fileID: 1195770926446703609, guid: bcc86ad5166307648ac9690354654735, type: 3}
   key: {fileID: 4632594972355483623, guid: ef149b1eeae321043981a2a71e6cd81b, type: 3}
-  audioClips: []
   hasKey: 0

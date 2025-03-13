@@ -23,11 +23,13 @@ public class EnemyHealth : Health
         
         if (!IsDeath) return;
         OnEnemyDie?.Invoke();
+
     }
      
     public void DeathEnemyVFX()
     {
         Instantiate(deathZombieVFXPrefab, transform.position, Quaternion.identity);
+        ServiceLocator.Get<AudioController>().PlaySFX(clip);
         dropConsumable.DropItems();
         Destroy(gameObject);
     }

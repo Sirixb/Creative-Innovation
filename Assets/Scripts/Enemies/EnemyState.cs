@@ -39,6 +39,8 @@ public class EnemyState : Character
     [SerializeField] private ContactFilter2D contactFilter;
     [SerializeField] private bool isPlayerInSight;
     [SerializeField] private bool isPlayerInRange;
+    [SerializeField] private AudioClip[] clip;
+
 
     private float _attackRateTimer = 0f;
 
@@ -176,6 +178,8 @@ public class EnemyState : Character
     {
         SetRotation(GetDirectionToPlayer().x);
         _attackStrategy?.Attack(transform, _playerController.transform);
+        ServiceLocator.Get<AudioController>().PlaySFX(clip);
+
     }
 
     public bool CanAttack()

@@ -17,6 +17,7 @@ public class Door : MonoBehaviour
     [SerializeField] private CanvasGroup findKeyCanvasGroup;
     [SerializeField] private float fadeSpeed = 1f;
     private float _initialPosition;
+    [SerializeField] private AudioClip finalMusic;
 
     private void Start()
     {
@@ -52,6 +53,7 @@ public class Door : MonoBehaviour
         {
             findKeyCanvasGroup.alpha = 0;
             PutKey();
+            ServiceLocator.Get<AudioController>().PlayMusic(finalMusic);
         }
         else
         {
