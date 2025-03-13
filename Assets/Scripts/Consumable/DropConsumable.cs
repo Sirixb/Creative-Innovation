@@ -4,11 +4,20 @@ using UnityEngine;
 
 public class DropConsumable : MonoBehaviour
 {
-    [SerializeField] private GameObject goldCoin, healthGlobe;
+    [SerializeField] private GameObject goldCoin, healthGlobe, key;
     [SerializeField] private AudioClip[] audioClips;
-	
+    [SerializeField] private bool hasKey = false;
+
+    public bool HasKey { get => hasKey; set => hasKey = value; }
+
     public void DropItems()
     {
+        if (HasKey)
+        {
+            Instantiate(key, transform.position, Quaternion.identity);
+            return;
+        }
+        
         var randomNum = Random.Range(1, 5);
         if (randomNum == 1)
         {
@@ -27,6 +36,12 @@ public class DropConsumable : MonoBehaviour
                 Audio();
             }
         }
+        
+    }
+
+    private void DropKey()
+    {
+       
     }
 
     private void Audio()
