@@ -23,6 +23,7 @@ public class SpecialAttack : AttackStrategy
     }
 
     [SerializeField] private GameObject magicBornPrefab;
+    [SerializeField] private int maxEnemiesSpawned = 6;
     [SerializeField] private List<SpawnData> spawnList;
     [SerializeField] private List<GameObject> enemySpawnedList;
     private int damageByBossDie = 300;
@@ -36,7 +37,7 @@ public class SpecialAttack : AttackStrategy
     {
         this._target = target;
         var randomValue = Random.value;
-        if (randomValue >= 0.9f)
+        if (randomValue >= 0.9f && LivingEnemies() < maxEnemiesSpawned - 1)
         {
             CreateOrcs();
             return;
@@ -55,14 +56,14 @@ public class SpecialAttack : AttackStrategy
 
     private void CreateOrcs()
     {
-        ChangeAttackAtributtes(damage: 15, range: 6, rate: 8 );
+        ChangeAttackAtributtes(damage: 15, range: 6, rate: 8);
         var spawner = FindObjectOfType<Spawner>();
         foreach (var spawnData in spawnList)
         {
             var position = (Vector2)transform.position;
             var insideUnitCircle = Random.insideUnitCircle;
-            var enemySpawned = spawner.Spawn(spawnData.characterId, position  + insideUnitCircle);
-            Instantiate(magicBornPrefab,position + insideUnitCircle,Quaternion.identity);
+            var enemySpawned = spawner.Spawn(spawnData.characterId, position + insideUnitCircle);
+            Instantiate(magicBornPrefab, position + insideUnitCircle, Quaternion.identity);
             enemySpawnedList.Add(enemySpawned);
         }
     }
@@ -81,7 +82,7 @@ public class SpecialAttack : AttackStrategy
 
     private void MeleeAttack()
     {
-        ChangeAttackAtributtes(damage: 30, range: 10f,rate: 1.2f);
+        ChangeAttackAtributtes(damage: 30, range: 10f, rate: 1.2f);
         collider2d.enabled = true;
         StartCoroutine(FinishMeleeAttack());
     }
@@ -104,21 +105,36 @@ public class SpecialAttack : AttackStrategy
         var playerHealth = other.gameObject.GetComponent<PlayerHealth>();
         playerHealth?.TakeDamage(damage, transform);
     }
+
     private void DestroySpawnedEnemies()
     {
         for (var i = enemySpawnedList.Count - 1; i >= 0; i--)
         {
+            if (enemySpawnedList[i] == null)
+            {
+                enemySpawnedList.RemoveAt(i);
+            }
+
             if (enemySpawnedList[i] != null)
             {
                 enemySpawnedList[i].GetComponent<EnemyHealth>()?.TakeDamage(damageByBossDie, transform);
             }
+        }
+    }
 
+    private int LivingEnemies()
+    {
+        for (var i = 0; i < enemySpawnedList.Count; i++)
+        {
             if (enemySpawnedList[i] == null)
             {
                 enemySpawnedList.RemoveAt(i);
             }
         }
+
+        return enemySpawnedList.Count;
     }
+
     private void OnDisable()
     {
         enemyHealth.OnEnemyDie -= DestroySpawnedEnemies;

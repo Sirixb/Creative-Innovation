@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8068347042202640827}
   - component: {fileID: 2095033847691304709}
-  - component: {fileID: 1723482249188946054}
+  - component: {fileID: 6816058511827937271}
   - component: {fileID: 7097154234991227921}
   - component: {fileID: 7720513022092363090}
   - component: {fileID: 6249793986405196670}
@@ -88,8 +88,8 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!70 &1723482249188946054
-CapsuleCollider2D:
+--- !u!61 &6816058511827937271
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -121,8 +121,18 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.4161385, y: 0.5248266}
-  m_Direction: 0
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.375, y: 0.21875}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.4997559, y: 0.32364422}
+  m_EdgeRadius: 0
 --- !u!50 &7097154234991227921
 Rigidbody2D:
   serializedVersion: 4
@@ -164,8 +174,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   effect: {fileID: 11400000, guid: 61ba4179f682bd346b8efa850f76b349, type: 2}
   pickUpDistance: 4
-  accelartionRate: 3
-  moveSpeed: 1.5
+  accelartionRate: 0
+  moveSpeed: 0
   animCurve:
     serializedVersion: 2
     m_Curve:

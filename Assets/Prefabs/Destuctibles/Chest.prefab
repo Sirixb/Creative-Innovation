@@ -173,7 +173,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destroyedPrefab: {fileID: 7030760695652696173, guid: bba90c4151f87d3479bcc5fc765e2d04, type: 3}
-  particles: {fileID: 424379817754494966, guid: 38ff57a2c0a23c04f9b16a68c81315f8, type: 3}
+  particles: {fileID: 424379817754494966, guid: 9d1b3aac89917af409d6c2af47de022e, type: 3}
   destroyDelay: 0
   dropConsumable: {fileID: 23893689035617584}
 --- !u!114 &23893689035617584
