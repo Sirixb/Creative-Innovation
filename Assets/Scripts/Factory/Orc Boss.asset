@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Orc Boss
   m_EditorClassIdentifier: 
   characterID: Orc Boss
-  prefab: {fileID: 1416484291768963311, guid: 6449d1984e2ecf94e8b0b2f0b9c011ed, type: 3}
+  prefab: {fileID: 7023202072414855634, guid: 2edecc8fcac63384f93258b76c9dfdd4, type: 3}
