@@ -62,7 +62,7 @@ public class PlayerController : Character
     {
         _movement = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         if (_movement != Vector2.zero) _movement.Normalize();
-        rb.MovePosition(rb.position + _movement * (Speed * Time.deltaTime));
+        rb.MovePosition(rb.position + _movement * (Speed * Time.fixedDeltaTime));
     }
 
     private void FacingDirection()
@@ -85,6 +85,7 @@ public class PlayerController : Character
     public void DisableComponentsOnPlayerDie()
     {
         _weapon.DisableWeapon();
+        playerHealth.enabled = false;
         capsuleCollider2D.enabled = false;
         this.enabled = false;
         animator.SetFloat(_runHash, 0f);

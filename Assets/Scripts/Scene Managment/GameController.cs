@@ -41,6 +41,7 @@ public class GameController : MonoBehaviour
 
     private IEnumerator CheckPlayerDeathBeforeWin()
     {
+        _playerHealth.gameObject.GetComponent<PlayerController>().DisableComponentsOnPlayerDie();
         yield return new WaitForSeconds(1.5f);
 
         if (_playerHealth.IsDeath)
@@ -50,7 +51,6 @@ public class GameController : MonoBehaviour
 
         uiFade.GameWinCanvasGroup.gameObject.SetActive(true);
         uiFade.FadeToPanel(uiFade.GameWinCanvasGroup, targetAlpha: 1);
-        _playerHealth.gameObject.GetComponent<PlayerController>().DisableComponentsOnPlayerDie();
     }
 
     private void GameOver()

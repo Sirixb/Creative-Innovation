@@ -15,6 +15,8 @@ public class RangeAttack : AttackStrategy
         lance.GetComponent<Rigidbody2D>().velocity = direction * arrowSpeed;
 
         var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        var localScale = Mathf.Approximately(transform.localScale.x, -1) ? 1 : -1;
         lance.transform.rotation = Quaternion.Euler(0, 0, angle - 90f);
+        lance.transform.localScale = new Vector3(localScale, 1, 1);
     }
 }

@@ -6292,7 +6292,7 @@ TextureImporter:
         width: 16
         height: 40
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -6300,6 +6300,27 @@ TextureImporter:
       bones: []
       spriteID: a1b2f5b6c5c81a944947c470db9c3c28
       internalID: -1073758969
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dungeon_Tiles_295
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 261
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 56f7039a3c2a17f44a526c2543a02283
+      internalID: 2123733234
       vertices: []
       indices: 
       edges: []
@@ -6533,6 +6554,7 @@ TextureImporter:
       Dungeon_Tiles_292: 727055469
       Dungeon_Tiles_293: 2079298498
       Dungeon_Tiles_294: -1073758969
+      Dungeon_Tiles_295: 2123733234
       Dungeon_Tiles_3: 521049641
       Dungeon_Tiles_30: -1534162046
       Dungeon_Tiles_31: -1222792200

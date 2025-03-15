@@ -18,6 +18,7 @@ public class Door : MonoBehaviour
     [SerializeField] private float fadeSpeed = 1f;
     private float _initialPosition;
     [SerializeField] private AudioClip finalMusic;
+    [SerializeField] private AudioClip putKey;
 
     private void Start()
     {
@@ -29,20 +30,20 @@ public class Door : MonoBehaviour
     {
         if (keyedLock == null || particles == null) return;
         Instantiate(particles, transform.position, Quaternion.identity);
+        ServiceLocator.Get<AudioController>().PlaySFX(putKey);
         Instantiate(keyedLock, transform.position, Quaternion.identity);
         StartCoroutine(OpenDoor());
+        ServiceLocator.Get<AudioController>().PlayMusic(finalMusic);
     }
 
     private IEnumerator OpenDoor()
     {
-        var doorPosition = door.transform.position.x;
         while (door.transform.position.x > _initialPosition - targetXMoveDoor)
         {
             door.transform.Translate(Vector2.left * (speed * Time.deltaTime));
             yield return null;
         }
 
-        Debug.Log("Open door");
         boxCollider2D.enabled = false;
     }
 
@@ -53,9 +54,8 @@ public class Door : MonoBehaviour
         {
             findKeyCanvasGroup.alpha = 0;
             PutKey();
-            ServiceLocator.Get<AudioController>().PlayMusic(finalMusic);
         }
-        else
+        else if (playerHealth)
         {
             StartCoroutine(FindKey(findKeyCanvasGroup, targetAlpha: 1f));
         }

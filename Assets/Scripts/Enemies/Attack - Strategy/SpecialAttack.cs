@@ -26,7 +26,7 @@ public class SpecialAttack : AttackStrategy
     [SerializeField] private int maxEnemiesSpawned = 6;
     [SerializeField] private List<SpawnData> spawnList;
     [SerializeField] private List<GameObject> enemySpawnedList;
-    private int damageByBossDie = 300;
+    private readonly int damageByBossDie = 300;
 
     private void OnEnable()
     {

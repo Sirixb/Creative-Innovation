@@ -13,5 +13,4 @@ MonoBehaviour:
   m_Name: HealthConsumable
   m_EditorClassIdentifier: 
   consumableName: HealthGlobe
-  icon: {fileID: 0}
-  healAmount: 5
+  healAmount: 10
