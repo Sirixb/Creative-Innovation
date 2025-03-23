@@ -11,5 +11,5 @@ public abstract class AttackStrategy : MonoBehaviour
     public float AttackRange { get => attackRange; set => attackRange = value; }
     public float AttackRate { get => attackRate; set => attackRate = value; }
 
-    public abstract void Attack(Transform attacker, Transform target);
+    public abstract void Attack(Transform attacker = null, Transform target = null);
 }

@@ -199,7 +199,10 @@ GameObject:
   - component: {fileID: 5198209302841068554}
   - component: {fileID: 9104772775296932936}
   - component: {fileID: 5598086116939053385}
+  - component: {fileID: -982346716223843256}
+  - component: {fileID: -6197845026691933364}
   - component: {fileID: 9076903310341024338}
+  - component: {fileID: -4208705659513510436}
   - component: {fileID: 8044025935677692596}
   - component: {fileID: 7797296849600812226}
   - component: {fileID: 4580187157166581263}
@@ -415,6 +418,41 @@ MonoBehaviour:
   clip:
   - {fileID: 8300000, guid: 3c9130c0c2f0898449992c5b77aa3b29, type: 3}
   - {fileID: 8300000, guid: 850a7079fa3778b4bafeafd98e590a00, type: 3}
+--- !u!114 &-982346716223843256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7023202072414855634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c12e0954001841518fcc57f2b9156939, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 15
+  attackRange: 10
+  attackRate: 1.2
+  arrowPrefab: {fileID: 3205707660741638017, guid: bd145814ce27d4946a03b9dcdd37076a, type: 3}
+  firePoint: {fileID: 3016084848583780482}
+  arrowSpeed: 12
+--- !u!114 &-6197845026691933364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7023202072414855634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4c57d80faee468eabceac6a6cf209de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 30
+  attackRange: 1.3
+  attackRate: 2
+  collider2d: {fileID: 936457416765479281}
+  timeToFinishMeleeAttack: 0.5
 --- !u!114 &9076903310341024338
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -427,15 +465,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bba41bb94c3c4f21adf9a5a179181e02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 30
-  attackRange: 1.3
-  attackRate: 2
-  arrowPrefab: {fileID: 3205707660741638017, guid: bd145814ce27d4946a03b9dcdd37076a, type: 3}
-  firePoint: {fileID: 3016084848583780482}
-  collider2d: {fileID: 936457416765479281}
+  damage: 0
+  attackRange: 6
+  attackRate: 8
   enemyHealth: {fileID: 8044025935677692596}
-  arrowSpeed: 12
-  timeToFinishMeleeAttack: 0.5
   magicBornPrefab: {fileID: 1586675574162211068, guid: 260044196b90e514bba9f1aafa2735ba, type: 3}
   maxEnemiesSpawned: 6
   spawnList:
@@ -444,6 +477,21 @@ MonoBehaviour:
   - characterId: Orc Rogue
     spawnPosition: {fileID: 0}
   enemySpawnedList: []
+--- !u!114 &-4208705659513510436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7023202072414855634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d44e19f0d504a4a81110cdbcaa271a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meleeAttack: {fileID: -6197845026691933364}
+  rangeAttack: {fileID: -982346716223843256}
+  spawnAttack: {fileID: 9076903310341024338}
 --- !u!114 &8044025935677692596
 MonoBehaviour:
   m_ObjectHideFlags: 0

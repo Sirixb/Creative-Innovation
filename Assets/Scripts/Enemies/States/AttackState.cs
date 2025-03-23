@@ -4,10 +4,11 @@ public class AttackState : IEnemyState
 {
     private EnemyState _enemyState;
 
-    public void Enter(EnemyState enemyState)
+   public virtual void Enter(EnemyState enemyState)
     {
         this._enemyState = enemyState;
         // Debug.Log("Entrando en estado de ataque");
+        _enemyState.IsAttack = true;
         CallAttack();
     }
 
@@ -19,8 +20,8 @@ public class AttackState : IEnemyState
         if (!_enemyState.CanAttack())
             return;
 
-        if (_enemyState.PlayerInRange())
-            CallAttack();
+        // if (_enemyState.PlayerInRange())
+        //     CallAttack();
         else if (_enemyState.PlayerInSight())
             _enemyState.ChangeState(new ChaseState());
         else if (!_enemyState.PlayerInSight())
@@ -33,8 +34,10 @@ public class AttackState : IEnemyState
         _enemyState.SetAnimation("Attack");
     }
 
-    public void Exit()
+    public virtual void Exit()
     {
         // Debug.Log("Saliendo del estado de ataque");
+        _enemyState.IsAttack = false ;
+        _enemyState.AttackSelectorManager.ChooseAttack();
     }
 }

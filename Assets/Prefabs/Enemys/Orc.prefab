@@ -243,6 +243,8 @@ MonoBehaviour:
   minPatrolTime: 1
   maxPatrolTime: 2
   chaseSpeed: 4.5
+  attackSelectorAttackSelectorManager: {fileID: 0}
+  _attackStrategy: {fileID: 0}
   viewPosition: {fileID: 2269267195334766913}
   viewDistance: 5
   contactFilter:
@@ -280,6 +282,7 @@ MonoBehaviour:
   attackRange: 1
   attackRate: 1.2
   collider2d: {fileID: 8222544140759288664}
+  timeToFinishMeleeAttack: 0.6
 --- !u!114 &699791242279078083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -557,7 +560,7 @@ CircleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6064101519490862354}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:

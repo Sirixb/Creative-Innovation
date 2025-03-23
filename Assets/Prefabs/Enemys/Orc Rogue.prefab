@@ -230,6 +230,7 @@ GameObject:
   - component: {fileID: 6295110712277972563}
   - component: {fileID: 924294083634618222}
   - component: {fileID: 6460908282346226577}
+  - component: {fileID: -364723055026206883}
   - component: {fileID: 7306486384573160266}
   - component: {fileID: 5982659422702256182}
   - component: {fileID: 7869080177101024285}
@@ -425,6 +426,8 @@ MonoBehaviour:
   minPatrolTime: 1
   maxPatrolTime: 2
   chaseSpeed: 4.5
+  _attackAttackManager: {fileID: 0}
+  _attackStrategy: {fileID: 0}
   viewPosition: {fileID: 7261792617138679637}
   viewDistance: 10
   contactFilter:
@@ -446,6 +449,20 @@ MonoBehaviour:
   clip:
   - {fileID: 8300000, guid: 3c9130c0c2f0898449992c5b77aa3b29, type: 3}
   - {fileID: 8300000, guid: 850a7079fa3778b4bafeafd98e590a00, type: 3}
+--- !u!114 &-364723055026206883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6052132402443822339}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ad96de78d894c32a324d25cf229fd27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyState: {fileID: 0}
+  SelectedAttackStrategy: {fileID: 0}
 --- !u!114 &7306486384573160266
 MonoBehaviour:
   m_ObjectHideFlags: 0

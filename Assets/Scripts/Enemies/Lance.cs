@@ -9,7 +9,7 @@ public class Lance : MonoBehaviour
 
     private void Start()
     {
-        Destroy(gameObject,2f);
+        Destroy(gameObject, 2f);
     }
 
     private void OnCollisionEnter2D(Collision2D other)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Enemies.AttackSelection;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -28,9 +29,13 @@ public class EnemyState : Character
     public float PatrolSpeed => patrolSpeed;
     public float MinPatrolTime => minPatrolTime;
     public float MaxPatrolTime => maxPatrolTime;
+    public bool IsAttack { get; set; } = false;
 
-    private IEnemyState _currentState;
+
+    public AttackSelectorManager AttackSelectorManager { get; private set; }
     private AttackStrategy _attackStrategy;
+    private IEnemyState _currentState;
+    private float _attackRateTimer = 0f;
 
     [Header("Vision Configuration")]
     [SerializeField] private Transform viewPosition;
@@ -41,8 +46,6 @@ public class EnemyState : Character
     [SerializeField] private AudioClip[] clip;
 
 
-    private float _attackRateTimer = 0f;
-
     private readonly List<RaycastHit2D> _results = new List<RaycastHit2D>();
 
     private void Awake()
@@ -52,7 +55,9 @@ public class EnemyState : Character
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _capsuleCollider2D = GetComponent<CapsuleCollider2D>();
         _collider2D = transform.GetChild(1).GetComponentInChildren<Collider2D>();
-        _attackStrategy = GetComponentInChildren<AttackStrategy>();
+        _attackStrategy ??= GetComponentInChildren<AttackStrategy>();
+        AttackSelectorManager = GetComponent<AttackSelectorManager>();
+        AttackSelectorManager ??= gameObject.AddComponent<SingleAttackSelector>();
         _playerController = FindObjectOfType<PlayerController>();
         _playerHealth = _playerController.GetComponent<PlayerHealth>();
         _enemyHealth = GetComponent<EnemyHealth>();
@@ -169,7 +174,7 @@ public class EnemyState : Character
 
     public void SetRotation(float direction)
     {
-        var localScale = direction >= 0 ? MathF.Abs(transform.localScale.x) : -MathF.Abs(transform.localScale.x);
+        var localScale = direction > 0 ? MathF.Abs(transform.localScale.x) : -MathF.Abs(transform.localScale.x);
         transform.localScale = new Vector3(localScale, transform.localScale.y, 1);
     }
 
@@ -178,7 +183,6 @@ public class EnemyState : Character
         SetRotation(GetDirectionToPlayer().x);
         _attackStrategy?.Attack(transform, _playerController.transform);
         ServiceLocator.Get<AudioController>().PlaySFX(clip);
-
     }
 
     public bool CanAttack()
@@ -197,5 +201,10 @@ public class EnemyState : Character
     {
         _enemyHealth.OnEnemyDie += OnEnemyDie;
         _playerHealth.OnPlayerDie += OnPlayerDie;
+    }
+
+    public void SetAttackStrategy(AttackStrategy selectedAttack)
+    {
+        _attackStrategy = selectedAttack;
     }
 }
