@@ -158,3 +158,24 @@ Assets/
 - `com.unity.render-pipelines.universal` (14.0.11) - URP rendering
 - `com.unity.timeline` (1.7.6) - Cinematic sequences
 - `com.playfab` (latest) - PlayFab SDK for Unity
+
+## Context7 Usage
+
+### PlayFab Documentation
+Cuando se solicite documentación o generación de código de PlayFab, usar:
+- **Librería**: /microsoftdocs/playfab-docs
+- **Herramienta**: context7_resolve-library-id y context7_query-docs
+
+Ejemplo de prompting:
+```
+Usa context7 para la documentacion y generacion de codigo. Usa la libreria /microsoftdocs/playfab-docs
+```
+
+## Reglas de Trabajo
+
+### Antes de hacer cambios en el código
+- **SIEMPRE** preguntar al usuario antes de modificar código existente
+- Pedir permiso antes de alterar cualquier archivo
+- Explicar qué cambio se quiere hacer y por qué
+Usa context7 para la documentacion y generacion de codigo. Usa la libreria /microsoftdocs/playfab-docs
+```
