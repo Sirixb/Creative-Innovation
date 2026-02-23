@@ -9,9 +9,10 @@ public class PlayerHealth : Health
 {
     public event Action OnPlayerDie;
 
+    //Refactor currency objetcts
     private Slider _healthSlider;
     private TMP_Text _goldText;
-    private int _currentGold = 0;
+    [SerializeField] private int currentGold = 0;
 
     private const string HealthSliderText = "Health Slider";
     private const string CoinAmountText = "Gold Amount Text";
@@ -55,8 +56,13 @@ public class PlayerHealth : Health
 
     public void UpdateCurrency(int gold)
     {
-        _currentGold += gold;
-        _goldText.text = _currentGold.ToString("D3");
+        currentGold += gold;
+        UpdateCurrencyUI();
+    }
+
+    private void UpdateCurrencyUI()
+    {
+        _goldText.text = currentGold.ToString("D3");
     }
 
     private void OnCollisionStay2D(Collision2D other)
@@ -64,4 +70,19 @@ public class PlayerHealth : Health
         if (!other.gameObject.TryGetComponent(out EnemyHealth enemy)) return;
         TakeDamage(enemy.DamageByContact, other.transform);
     }
+    
+    //Playfab
+    public void SetHealthByPlayFab(int savedHealth)
+    {
+        currentHealth = savedHealth;
+        UpdateHealthSlider();
+    }
+    
+    public void SetCurrencyByPlayFab(int savedCurrency)
+    {
+        currentGold = savedCurrency;
+        UpdateCurrencyUI();
+    }
+    
+    
 }

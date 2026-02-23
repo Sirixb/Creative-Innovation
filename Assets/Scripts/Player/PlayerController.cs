@@ -2,104 +2,102 @@ using System;
 using Cinemachine;
 using UnityEngine;
 
-namespace Player
+
+public class PlayerController : Character
 {
-    public class PlayerController : Character
+    [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private Animator animator;
+    [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private PlayerHealth playerHealth;
+    [SerializeField] private CapsuleCollider2D capsuleCollider2D;
+    [SerializeField] private Collider2D collider2d;
+    [SerializeField] private KnockBack knockBack;
+    private IWeapon _weapon;
+
+
+    [SerializeField] private float speed;
+    public float Speed { get => speed; set => speed = value; }
+    public bool FacingLeft { get; private set; }
+
+
+    private Vector2 _movement;
+
+    private Camera _mainCamera;
+
+    private readonly int _runHash = Animator.StringToHash("run");
+
+    private void Awake()
     {
-        [SerializeField] private Rigidbody2D rb;
-        [SerializeField] private Animator animator;
-        [SerializeField] private SpriteRenderer spriteRenderer;
-        [SerializeField] private PlayerHealth playerHealth;
-        [SerializeField] private CapsuleCollider2D capsuleCollider2D;
-        [SerializeField] private Collider2D collider2d;
-        [SerializeField] private KnockBack knockBack;
-        private IWeapon _weapon;
+        _mainCamera = Camera.main;
+        _weapon = GetComponentInChildren<IWeapon>();
+        FindObjectOfType<CinemachineVirtualCamera>().m_Follow = transform;
+    }
 
-
-        [SerializeField] private float speed;
-        public float Speed { get => speed; set => speed = value; }
-        public bool FacingLeft { get; private set; }
-
-
-        private Vector2 _movement;
-
-        private Camera _mainCamera;
-
-        private readonly int _runHash = Animator.StringToHash("run");
-
-        private void Awake()
+    private void OnEnable()
+    {
+        if (playerHealth != null)
         {
-            _mainCamera = Camera.main;
-            _weapon = GetComponentInChildren<IWeapon>();
-            FindObjectOfType<CinemachineVirtualCamera>().m_Follow = transform;
+            playerHealth.OnPlayerDie += DisableComponentsOnPlayerDie;
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (knockBack.GettingKnockedBack)
+        {
+            return;
         }
 
-        private void OnEnable()
+        Move();
+    }
+
+    private void Update()
+    {
+        FacingDirection();
+        Animation();
+    }
+
+    private void Move()
+    {
+        _movement = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        if (_movement != Vector2.zero) _movement.Normalize();
+        rb.MovePosition(rb.position + _movement * (Speed * Time.fixedDeltaTime));
+    }
+
+    private void FacingDirection()
+    {
+        var mousePosition = Input.mousePosition;
+        var playerScreenPoint = _mainCamera.WorldToScreenPoint(transform.position);
+
+        if (mousePosition.x < playerScreenPoint.x)
         {
-            if (playerHealth != null)
-            {
-                playerHealth.OnPlayerDie += DisableComponentsOnPlayerDie;
-            }
+            FacingLeft = true;
+            transform.rotation = Quaternion.Euler(0, -180, 0);
         }
-
-        private void FixedUpdate()
+        else
         {
-            if (knockBack.GettingKnockedBack)
-            {
-                return;
-            }
-
-            Move();
+            FacingLeft = false;
+            transform.rotation = Quaternion.Euler(0, 0, 0);
         }
+    }
 
-        private void Update()
-        {
-            FacingDirection();
-            Animation();
-        }
+    public void DisableComponentsOnPlayerDie()
+    {
+        _weapon.DisableWeapon();
+        playerHealth.enabled = false;
+        capsuleCollider2D.enabled = false;
+        this.enabled = false;
+        animator.SetFloat(_runHash, 0f);
+    }
 
-        private void Move()
-        {
-            _movement = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-            if (_movement != Vector2.zero) _movement.Normalize();
-            rb.MovePosition(rb.position + _movement * (Speed * Time.fixedDeltaTime));
-        }
+    private void Animation()
+    {
+        var move = Math.Abs(_movement.x) + Math.Abs(_movement.y);
+        animator.SetFloat(_runHash, move);
+    }
 
-        private void FacingDirection()
-        {
-            var mousePosition = Input.mousePosition;
-            var playerScreenPoint = _mainCamera.WorldToScreenPoint(transform.position);
-
-            if (mousePosition.x < playerScreenPoint.x)
-            {
-                FacingLeft = true;
-                transform.rotation = Quaternion.Euler(0, -180, 0);
-            }
-            else
-            {
-                FacingLeft = false;
-                transform.rotation = Quaternion.Euler(0, 0, 0);
-            }
-        }
-
-        public void DisableComponentsOnPlayerDie()
-        {
-            _weapon.DisableWeapon();
-            playerHealth.enabled = false;
-            capsuleCollider2D.enabled = false;
-            this.enabled = false;
-            animator.SetFloat(_runHash, 0f);
-        }
-
-        private void Animation()
-        {
-            var move = Math.Abs(_movement.x) + Math.Abs(_movement.y);
-            animator.SetFloat(_runHash, move);
-        }
-
-        private void OnDisable()
-        {
-            playerHealth.OnPlayerDie -= DisableComponentsOnPlayerDie;
-        }
+    private void OnDisable()
+    {
+        playerHealth.OnPlayerDie -= DisableComponentsOnPlayerDie;
     }
 }

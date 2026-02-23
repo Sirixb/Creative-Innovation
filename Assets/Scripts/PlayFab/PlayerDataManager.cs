@@ -16,14 +16,8 @@ using UnityEngine;
 /// </remarks>
 public class PlayerDataManager : MonoBehaviour
 {
-    /// <summary>
-    /// Referencia al gestor principal de PlayFab
-    /// </summary>
     private PlayFabManager _playFabManager;
 
-    /// <summary>
-    /// Inicializa el gestor de datos del jugador.
-    /// </summary>
     private void Awake()
     {
         _playFabManager = PlayFabManager.Instancia;
@@ -34,13 +28,9 @@ public class PlayerDataManager : MonoBehaviour
             return;
         }
 
-        // Suscribirse al evento de login exitoso para cargar datos iniciales
         _playFabManager.OnLoginExitoso += OnLoginExitoso;
     }
 
-    /// <summary>
-    /// Callback cuando el login es exitoso. Carga los datos del jugador.
-    /// </summary>
     private void OnLoginExitoso()
     {
         Debug.Log("[PlayerDataManager] Login exitoso, listo para sincronizar datos.");
@@ -49,16 +39,7 @@ public class PlayerDataManager : MonoBehaviour
     /// <summary>
     /// Guarda datos del jugador en PlayFab.
     /// </summary>
-    /// <param name="datos">Diccionario con clave-valor a guardar</param>
-    /// <param name="visibilidad">Permisos de lectura (Publico, Privado o Interno)</param>
-    /// <param name="onSuccess">Callback cuando la operación es exitosa</param>
-    /// <param name="onError">Callback cuando ocurre un error</param>
-    public void GuardarDatos(Dictionary<string, string> datos,
-        //UserDataVisibility visibility = UserDataVisibility.Private,      //Comentado para evitar error
-        UserDataPermission visibility = UserDataPermission.Private, 
-        // Action onSuccess = null,
-        Action<string> onSuccess = null, //creado para Me evitar error
-        Action<string> onError = null)
+    public void GuardarDatos(Dictionary<string, string> datos, UserDataPermission visibility = UserDataPermission.Private, Action<string> onSuccess = null, Action<string> onError = null)
     {
         if (!VerificarAutenticacion(onError))
             return;
@@ -66,14 +47,14 @@ public class PlayerDataManager : MonoBehaviour
         var solicitud = new UpdateUserDataRequest
         {
             Data = datos,
-            Permission = visibility    //Comentado para evitar error
+            Permission = visibility
         };
 
         PlayFabClientAPI.UpdateUserData(solicitud, 
             resultado => 
             {
                 Debug.Log("[PlayerDataManager] Datos guardados exitosamente.");
-                onSuccess?.Invoke(null);//cree null para que funcionara
+                onSuccess?.Invoke("Datos guardados");
             }, 
             error => 
             {
@@ -86,29 +67,19 @@ public class PlayerDataManager : MonoBehaviour
     /// <summary>
     /// Guarda un dato individual del jugador.
     /// </summary>
-    /// <param name="clave">Clave del dato</param>
-    /// <param name="valor">Valor del dato</param>
-    /// <param name="visibilidad">Permisos de lectura</param>
-    /// <param name="callback">Callback con el valor obtenido</param>
-    /// <param name="onError">Callback de error</param>
     public void GuardarDato(
         string clave, 
         string valor,
-        //UserDataVisibility visibilidad = UserDataVisibility.Private,    //Comentado para evitar error
-        UserDataPermission visibilidad = UserDataPermission.Private,    //Reemplazo
-        Action<string> callback = null,//Comentado para evitar error
-        // Action callback = null,
+        UserDataPermission visibility = UserDataPermission.Private,
+        Action<string> onSuccess = null,
         Action<string> onError = null)
     {
-        GuardarDatos(new Dictionary<string, string> { { clave, valor } }, visibilidad, callback, onError);  //Comentado para evitar error
+        GuardarDatos(new Dictionary<string, string> { { clave, valor } }, visibility, onSuccess, onError);
     }
 
     /// <summary>
     /// Obtiene los datos del jugador desde PlayFab.
     /// </summary>
-    /// <param name="claves">Lista de claves a obtener. Null para obtener todas.</param>
-    /// <param name="callback">Callback con el diccionario de datos obtenido</param>
-    /// <param name="onError">Callback de error</param>
     public void ObtenerDatos(
         List<string> claves = null,
         Action<Dictionary<string, UserDataRecord>> callback = null,
@@ -140,9 +111,6 @@ public class PlayerDataManager : MonoBehaviour
     /// <summary>
     /// Obtiene un dato específico del jugador.
     /// </summary>
-    /// <param name="clave">Clave del dato a obtener</param>
-    /// <param name="callback">Callback con el valor obtenido</param>
-    /// <param name="onError">Callback de error</param>
     public void ObtenerDato(
         string clave,
         Action<string> callback,
@@ -165,16 +133,58 @@ public class PlayerDataManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Actualiza un dato numérico específico del jugador (como monedas o puntuación).
-    /// Usa operación atómica para evitar condiciones de carrera.
+    /// Incrementa una estadística del jugador (suma al valor actual).
+    /// Primero obtiene el valor actual, luego suma el incremento y guarda.
     /// </summary>
-    /// <param name="clave">Clave del dato numérico</param>
-    /// <param name="incremento">Cantidad a incrementar (puede ser negativa)</param>
-    /// <param name="callback">Callback con el nuevo valor</param>
-    /// <param name="onError">Callback de error</param>
     public void IncrementarDato(
         string clave,
         int incremento,
+        Action<int> callback = null,
+        Action<string> onError = null)
+    {
+        if (!VerificarAutenticacion(onError))
+            return;
+
+        ObtenerEstadisticas(
+            estadisticas =>
+            {
+                int valorActual = estadisticas.ContainsKey(clave) ? estadisticas[clave] : 0;
+                int nuevoValor = valorActual + incremento;
+
+                var solicitud = new UpdatePlayerStatisticsRequest
+                {
+                    Statistics = new List<StatisticUpdate>
+                    {
+                        new StatisticUpdate
+                        {
+                            StatisticName = clave,
+                            Value = nuevoValor
+                        }
+                    }
+                };
+
+                PlayFabClientAPI.UpdatePlayerStatistics(solicitud,
+                    resultado =>
+                    {
+                        Debug.Log($"[PlayerDataManager] Estadística '{clave}' actualizada: {valorActual} + {incremento} = {nuevoValor}");
+                        callback?.Invoke(nuevoValor);
+                    },
+                    error =>
+                    {
+                        string mensaje = $"Error al incrementar dato: {error.GenerateErrorReport()}";
+                        Debug.LogError($"[PlayerDataManager] {mensaje}");
+                        onError?.Invoke(mensaje);
+                    });
+            },
+            onError);
+    }
+
+    /// <summary>
+    /// Establece el valor de una estadística directamente (reemplaza el valor).
+    /// </summary>
+    public void EstablecerEstadistica(
+        string clave,
+        int valor,
         Action<int> callback = null,
         Action<string> onError = null)
     {
@@ -188,7 +198,7 @@ public class PlayerDataManager : MonoBehaviour
                 new StatisticUpdate
                 {
                     StatisticName = clave,
-                    Value = incremento
+                    Value = valor
                 }
             }
         };
@@ -196,13 +206,12 @@ public class PlayerDataManager : MonoBehaviour
         PlayFabClientAPI.UpdatePlayerStatistics(solicitud,
             resultado =>
             {
-                Debug.Log($"[PlayerDataManager] Estadística '{clave}' incrementada en {incremento}");
-                // Para obtener el valor actualizado, usar ObtenerEstadisticas
-                callback?.Invoke(incremento);
+                Debug.Log($"[PlayerDataManager] Estadística '{clave}' establecida a {valor}");
+                callback?.Invoke(valor);
             },
             error =>
             {
-                string mensaje = $"Error al incrementar dato: {error.GenerateErrorReport()}";
+                string mensaje = $"Error al establecer estadística: {error.GenerateErrorReport()}";
                 Debug.LogError($"[PlayerDataManager] {mensaje}");
                 onError?.Invoke(mensaje);
             });
@@ -211,8 +220,6 @@ public class PlayerDataManager : MonoBehaviour
     /// <summary>
     /// Obtiene las estadísticas del jugador desde PlayFab.
     /// </summary>
-    /// <param name="callback">Callback con el diccionario de estadísticas</param>
-    /// <param name="onError">Callback de error</param>
     public void ObtenerEstadisticas(
         Action<Dictionary<string, int>> callback,
         Action<string> onError = null)
@@ -242,9 +249,6 @@ public class PlayerDataManager : MonoBehaviour
     /// <summary>
     /// Obtiene una estadística específica del jugador.
     /// </summary>
-    /// <param name="nombre">Nombre de la estadística</param>
-    /// <param name="callback">Callback con el valor de la estadística</param>
-    /// <param name="onError">Callback de error</param>
     public void ObtenerEstadistica(
         string nombre,
         Action<int> callback,
@@ -265,9 +269,6 @@ public class PlayerDataManager : MonoBehaviour
             onError);
     }
 
-    /// <summary>
-    /// Verifica que el jugador esté autenticado antes de hacer operaciones.
-    /// </summary>
     private bool VerificarAutenticacion(Action<string> callbackError)
     {
         if (_playFabManager == null)
@@ -289,7 +290,6 @@ public class PlayerDataManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        // Desuscribirse de eventos cuando se destruye el objeto
         if (_playFabManager != null)
         {
             _playFabManager.OnLoginExitoso -= OnLoginExitoso;
