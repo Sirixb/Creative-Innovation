@@ -19,7 +19,9 @@ public class PlayerHealth : Health
     private readonly int _dieHash = Animator.StringToHash("die");
     [SerializeField] private bool hasKey = false;
     public bool HasKey { get => hasKey; set => hasKey = value; }
-
+    public int CurrentGold => currentGold;
+    public int CurrentHealth => currentHealth;
+    
     public void Start()
     {
         _healthSlider ??= GameObject.Find(HealthSliderText)?.GetComponent<Slider>();

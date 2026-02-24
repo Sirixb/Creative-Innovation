@@ -14,12 +14,12 @@ using UnityEngine;
 /// 2. Configurar el TitleId en el panel de PlayFab en el Editor
 /// 3. Agregar este prefab a la escena principal
 /// </remarks>
-public class PlayFabManager : MonoBehaviour
+public class PlayFabLogin : MonoBehaviour
 {
     /// <summary>
     /// Instancia singleton del gestor de PlayFab
     /// </summary>
-    public static PlayFabManager Instancia { get; private set; }
+    public static PlayFabLogin Instancia { get; private set; }
 
     /// <summary>
     /// Indica si el jugador está actualmente autenticado en PlayFab
@@ -115,7 +115,7 @@ public class PlayFabManager : MonoBehaviour
         EntityType = result.EntityToken.Entity.Type;
         EstaAutenticado = true;
 
-        Debug.Log($"[PlayFab] Login exitoso. PlayFabId: {PlayFabId}");
+        Debug.Log($"[PlayFabLogin] Login exitoso. PlayFabId: {PlayFabId}");
         
         OnLoginExitoso?.Invoke();
     }
@@ -128,7 +128,7 @@ public class PlayFabManager : MonoBehaviour
     private void OnErrorCallback(PlayFabError error)
     {
         string mensajeError = error.GenerateErrorReport();
-        Debug.LogError($"[PlayFab] Error de autenticación: {mensajeError}");
+        Debug.LogError($"[PlayFabLogin] Error de autenticación: {mensajeError}");
         
         EstaAutenticado = false;
         OnLoginFallido?.Invoke(mensajeError);
@@ -141,7 +141,7 @@ public class PlayFabManager : MonoBehaviour
     {
         if (!EstaAutenticado)
         {
-            Debug.LogWarning("[PlayFab] No hay sesión activa para cerrar.");
+            Debug.LogWarning("[PlayFabLogin] No hay sesión activa para cerrar.");
             return;
         }
 
@@ -154,10 +154,10 @@ public class PlayFabManager : MonoBehaviour
             PlayFabId = null;
             EntityId = null;
             EntityType = null;
-            Debug.Log("[PlayFab] Sesión cerrada exitosamente.");
+            Debug.Log("[PlayFabLogin] Sesión cerrada exitosamente.");
         }, error => 
         {
-            Debug.LogError($"[PlayFab] Error al cerrar sesión: {error.GenerateErrorReport()}");
+            Debug.LogError($"[PlayFabLogin] Error al cerrar sesión: {error.GenerateErrorReport()}");
         });
     }
 
@@ -168,7 +168,7 @@ public class PlayFabManager : MonoBehaviour
     public void ConfigurarTitleId(string titleId)
     {
         PlayFabSettings.staticSettings.TitleId = titleId;
-        Debug.Log($"[PlayFab] TitleId configurado: {titleId}");
+        Debug.Log($"[PlayFabLogin] TitleId configurado: {titleId}");
     }
 
     private void OnDestroy()

@@ -1,298 +1,226 @@
-using System;
+using System.Collections;
 using System.Collections.Generic;
-using PlayFab;
-using PlayFab.ClientModels;
 using UnityEngine;
 
-/// <summary>
-/// Gestor de datos del jugador en PlayFab.
-/// Permite almacenar, recuperar y actualizar datos asociados al perfil del jugador.
-/// </summary>
-/// <remarks>
-/// PlayFab ofrece dos tipos de datos de usuario:
-/// - Datos de usuario (UserData): Visibles y editables por el cliente
-/// - Datos de solo lectura (ReadOnlyData): Solo modificables desde el servidor
-/// - Datos internos (InternalData): Datos privados no accesibles desde el cliente
-/// </remarks>
 public class PlayerDataManager : MonoBehaviour
 {
-    private PlayFabManager _playFabManager;
+    [Header("Configuración")]
+    [SerializeField] private bool cargarAlIniciar = true;
+    [SerializeField] private bool datosCargados = false;
+    [SerializeField] public bool guardarEnCheckpoint = true;
 
-    private void Awake()
+    [Header("Data Saved")]
+    [SerializeField] private PlayerDataSaved playerDataSaved;
+
+    [Header("Referencias del Jugador")]
+    [SerializeField] private PlayerHealth playerHealth;
+    [SerializeField] private Dash dash;
+    [SerializeField] private Transform playerTransform;
+
+    [SerializeField] private IDataService _iDataService;
+
+    public void Config(IDataService playFabService)
     {
-        _playFabManager = PlayFabManager.Instancia;
-        
-        if (_playFabManager == null)
-        {
-            Debug.LogError("[PlayerDataManager] PlayFabManager no encontrado. Asegúrese de que existe en la escena.");
-            return;
-        }
-
-        _playFabManager.OnLoginExitoso += OnLoginExitoso;
+        this._iDataService = playFabService;
     }
 
+    private void Start()
+    {
+        // Suscribirse al evento de login exitoso
+        if (PlayFabLogin.Instancia)
+        {
+            PlayFabLogin.Instancia.OnLoginExitoso += OnLoginExitoso;
+        }
+
+        if (!playerHealth)
+            playerHealth = FindObjectOfType<PlayerHealth>();
+
+        if (!dash)
+            dash = FindObjectOfType<Dash>();
+
+        if (!playerTransform)
+            playerTransform = playerHealth?.transform;
+    }
+
+    /// <summary>
+    /// Callback cuando el login en PlayFab es exitoso.
+    /// Carga todos los datos del jugador.
+    /// </summary>
     private void OnLoginExitoso()
     {
-        Debug.Log("[PlayerDataManager] Login exitoso, listo para sincronizar datos.");
+        if (cargarAlIniciar && !datosCargados)
+        {
+            CargarDatosDelJugador();
+            datosCargados = true;
+        }
     }
 
     /// <summary>
-    /// Guarda datos del jugador en PlayFab.
+    /// Carga todos los datos del jugador desde PlayFab.
     /// </summary>
-    public void GuardarDatos(Dictionary<string, string> datos, UserDataPermission visibility = UserDataPermission.Private, Action<string> onSuccess = null, Action<string> onError = null)
+    public void CargarDatosDelJugador()
     {
-        if (!VerificarAutenticacion(onError))
-            return;
-
-        var solicitud = new UpdateUserDataRequest
+        if (_iDataService == null)
         {
-            Data = datos,
-            Permission = visibility
-        };
+            Debug.LogError("[PlayerDataManager] PlayFabService no disponible.");
+            return;
+        }
 
-        PlayFabClientAPI.UpdateUserData(solicitud, 
-            resultado => 
+        Debug.Log("[PlayerDataManager] Cargando datos del jugador...");
+
+        // Cargar posición del PlayerDataManager
+        _iDataService.ObtenerDato("checkpointX", valorX =>
+        {
+            _iDataService.ObtenerDato("checkpointY", valorY =>
             {
-                Debug.Log("[PlayerDataManager] Datos guardados exitosamente.");
-                onSuccess?.Invoke("Datos guardados");
-            }, 
-            error => 
-            {
-                string mensaje = $"Error al guardar datos: {error.GenerateErrorReport()}";
-                Debug.LogError($"[PlayerDataManager] {mensaje}");
-                onError?.Invoke(mensaje);
+                if (float.TryParse(valorX, out float x) && float.TryParse(valorY, out float y) &&
+                    playerTransform != null)
+                {
+                    playerTransform.position = new Vector2(x, y);
+                    playerDataSaved.checkPointPosition = new Vector2(x, y);
+                    Debug.Log($"[PlayerDataManager] Posición cargada: ({x}, {y})");
+                }
             });
-    }
+        });
 
-    /// <summary>
-    /// Guarda un dato individual del jugador.
-    /// </summary>
-    public void GuardarDato(
-        string clave, 
-        string valor,
-        UserDataPermission visibility = UserDataPermission.Private,
-        Action<string> onSuccess = null,
-        Action<string> onError = null)
-    {
-        GuardarDatos(new Dictionary<string, string> { { clave, valor } }, visibility, onSuccess, onError);
-    }
-
-    /// <summary>
-    /// Obtiene los datos del jugador desde PlayFab.
-    /// </summary>
-    public void ObtenerDatos(
-        List<string> claves = null,
-        Action<Dictionary<string, UserDataRecord>> callback = null,
-        Action<string> onError = null)
-    {
-        if (!VerificarAutenticacion(onError))
-            return;
-
-        var solicitud = new GetUserDataRequest
+        // Cargar llave
+        _iDataService.ObtenerDato("tieneLlave", valor =>
         {
-            PlayFabId = _playFabManager.PlayFabId,
-            Keys = claves
-        };
-
-        PlayFabClientAPI.GetUserData(solicitud, 
-            resultado => 
+            if (playerHealth)
             {
-                Debug.Log($"[PlayerDataManager] Datos obtenidos. Cantidad: {resultado.Data?.Count ?? 0}");
-                callback?.Invoke(resultado.Data);
-            }, 
-            error => 
-            {
-                string mensaje = $"Error al obtener datos: {error.GenerateErrorReport()}";
-                Debug.LogError($"[PlayerDataManager] {mensaje}");
-                onError?.Invoke(mensaje);
-            });
-    }
-
-    /// <summary>
-    /// Obtiene un dato específico del jugador.
-    /// </summary>
-    public void ObtenerDato(
-        string clave,
-        Action<string> callback,
-        Action<string> onError = null)
-    {
-        ObtenerDatos(new List<string> { clave }, 
-            datos => 
-            {
-                if (datos != null && datos.ContainsKey(clave))
-                {
-                    callback?.Invoke(datos[clave].Value);
-                }
-                else
-                {
-                    Debug.LogWarning($"[PlayerDataManager] La clave '{clave}' no existe en los datos del jugador.");
-                    callback?.Invoke(null);
-                }
-            }, 
-            onError);
-    }
-
-    /// <summary>
-    /// Incrementa una estadística del jugador (suma al valor actual).
-    /// Primero obtiene el valor actual, luego suma el incremento y guarda.
-    /// </summary>
-    public void IncrementarDato(
-        string clave,
-        int incremento,
-        Action<int> callback = null,
-        Action<string> onError = null)
-    {
-        if (!VerificarAutenticacion(onError))
-            return;
-
-        ObtenerEstadisticas(
-            estadisticas =>
-            {
-                int valorActual = estadisticas.ContainsKey(clave) ? estadisticas[clave] : 0;
-                int nuevoValor = valorActual + incremento;
-
-                var solicitud = new UpdatePlayerStatisticsRequest
-                {
-                    Statistics = new List<StatisticUpdate>
-                    {
-                        new StatisticUpdate
-                        {
-                            StatisticName = clave,
-                            Value = nuevoValor
-                        }
-                    }
-                };
-
-                PlayFabClientAPI.UpdatePlayerStatistics(solicitud,
-                    resultado =>
-                    {
-                        Debug.Log($"[PlayerDataManager] Estadística '{clave}' actualizada: {valorActual} + {incremento} = {nuevoValor}");
-                        callback?.Invoke(nuevoValor);
-                    },
-                    error =>
-                    {
-                        string mensaje = $"Error al incrementar dato: {error.GenerateErrorReport()}";
-                        Debug.LogError($"[PlayerDataManager] {mensaje}");
-                        onError?.Invoke(mensaje);
-                    });
-            },
-            onError);
-    }
-
-    /// <summary>
-    /// Establece el valor de una estadística directamente (reemplaza el valor).
-    /// </summary>
-    public void EstablecerEstadistica(
-        string clave,
-        int valor,
-        Action<int> callback = null,
-        Action<string> onError = null)
-    {
-        if (!VerificarAutenticacion(onError))
-            return;
-
-        var solicitud = new UpdatePlayerStatisticsRequest
-        {
-            Statistics = new List<StatisticUpdate>
-            {
-                new StatisticUpdate
-                {
-                    StatisticName = clave,
-                    Value = valor
-                }
+                bool tieneLlave = valor == "true";
+                playerHealth.HasKey = tieneLlave;
+                playerDataSaved.hasKey = tieneLlave;
+                Debug.Log($"[PlayerDataManager] Llave cargada: {tieneLlave}");
             }
-        };
+        });
 
-        PlayFabClientAPI.UpdatePlayerStatistics(solicitud,
-            resultado =>
+        // Cargar salud
+        _iDataService.ObtenerDato("salud", valor =>
+        {
+            if (playerHealth && int.TryParse(valor, out int salud) && salud > 0)
             {
-                Debug.Log($"[PlayerDataManager] Estadística '{clave}' establecida a {valor}");
-                callback?.Invoke(valor);
-            },
-            error =>
+                playerHealth.SetHealthByPlayFab(salud);
+                playerDataSaved.currentHealth = salud;
+                Debug.Log($"[PlayerDataManager] Salud cargada: {salud}");
+            }
+            else
             {
-                string mensaje = $"Error al establecer estadística: {error.GenerateErrorReport()}";
-                Debug.LogError($"[PlayerDataManager] {mensaje}");
-                onError?.Invoke(mensaje);
-            });
+                Debug.Log("[PlayerDataManager] No hay salud guardada o es inválida.");
+            }
+        });
+
+        // Cargar monedas
+        _iDataService.ObtenerDato("monedas", valor =>
+        {
+            if (playerHealth && int.TryParse(valor, out int currency))
+            {
+                playerHealth.SetCurrencyByPlayFab(currency);
+                playerDataSaved.currentGold = currency;
+                Debug.Log($"[PlayerDataManager] Monedas cargadas: {currency}");
+            }
+        });
+
+        // Cargar estado del dash
+        _iDataService.ObtenerDato("tieneDash", valor =>
+        {
+            if (dash)
+            {
+                bool tieneDash = valor == "true";
+                dash.enabled = tieneDash;
+                playerDataSaved.dashPower = tieneDash;
+                Debug.Log($"[PlayerDataManager] Dash cargado: {tieneDash}");
+            }
+        });
     }
 
     /// <summary>
-    /// Obtiene las estadísticas del jugador desde PlayFab.
+    /// Guarda todos los datos del jugador en PlayFab.
     /// </summary>
-    public void ObtenerEstadisticas(
-        Action<Dictionary<string, int>> callback,
-        Action<string> onError = null)
+    public void GuardarDatosDelJugador(Vector3 position)
     {
-        if (!VerificarAutenticacion(onError))
+        if (_iDataService == null)
+        {
+            Debug.LogError("[PlayerDataManager] PlayFabService no disponible.");
             return;
-
-        PlayFabClientAPI.GetPlayerStatistics(new GetPlayerStatisticsRequest(),
-            resultado =>
-            {
-                var estadisticas = new Dictionary<string, int>();
-                foreach (var stat in resultado.Statistics)
-                {
-                    estadisticas[stat.StatisticName] = stat.Value;
-                }
-                Debug.Log("[PlayerDataManager] Estadísticas obtenidas.");
-                callback?.Invoke(estadisticas);
-            },
-            error =>
-            {
-                string mensaje = $"Error al obtener estadísticas: {error.GenerateErrorReport()}";
-                Debug.LogError($"[PlayerDataManager] {mensaje}");
-                onError?.Invoke(mensaje);
-            });
-    }
-
-    /// <summary>
-    /// Obtiene una estadística específica del jugador.
-    /// </summary>
-    public void ObtenerEstadistica(
-        string nombre,
-        Action<int> callback,
-        Action<string> onError = null)
-    {
-        ObtenerEstadisticas(
-            estadisticas => 
-            {
-                if (estadisticas.ContainsKey(nombre))
-                {
-                    callback?.Invoke(estadisticas[nombre]);
-                }
-                else
-                {
-                    callback?.Invoke(0);
-                }
-            }, 
-            onError);
-    }
-
-    private bool VerificarAutenticacion(Action<string> callbackError)
-    {
-        if (_playFabManager == null)
-        {
-            callbackError?.Invoke("PlayFabManager no encontrado");
-            return false;
         }
 
-        if (!_playFabManager.EstaAutenticado)
-        {
-            string mensaje = "Jugador no autenticado. Inicie sesión primero.";
-            Debug.LogWarning($"[PlayerDataManager] {mensaje}");
-            callbackError?.Invoke(mensaje);
-            return false;
-        }
+        Debug.Log("[PlayerDataManager] Guardando datos del jugador...");
 
-        return true;
+        // Guardar posición actual del checkpoint
+        Vector2 posicionActual = position;
+        _iDataService.GuardarDato("checkpointX", posicionActual.x.ToString());
+        _iDataService.GuardarDato("checkpointY", posicionActual.y.ToString());
+
+        // Guardar llave
+        bool tieneLlave = playerHealth != null && playerHealth.HasKey;
+        _iDataService.GuardarDato("tieneLlave", tieneLlave ? "true" : "false");
+
+        // Guardar salud
+        int saludActual = /*ObtenerSaludActual();*/playerHealth.CurrentHealth;
+        _iDataService.GuardarDato("salud", saludActual.ToString());
+
+        // Guardar monedas
+        int monedasActuales = /*ObtenerMonedasActuales();*/ playerHealth.CurrentGold;
+        _iDataService.GuardarDatos(new Dictionary<string, string>
+        {
+            { "monedas", monedasActuales.ToString() }
+        });
+
+        // Guardar estado del dash
+        bool tieneDash = dash != null && dash.enabled;
+        _iDataService.GuardarDato("tieneDash", tieneDash ? "true" : "false");
+
+        Debug.Log($"[PlayerDataManager] Datos guardados - Salud: {saludActual}, " +
+                  $"Monedas: {monedasActuales}, Dash: {tieneDash}, Llave: {tieneLlave}," +
+                  $" Checkpoint: {posicionActual}");
     }
+
+    // /// <summary>
+    // /// Obtiene la salud actual del jugador.
+    // /// </summary>
+    // private int ObtenerSaludActual()
+    // {
+    //     if (!playerHealth) return 100;
+    //
+    //     // Obtener la salud a través de la reflexión o método público
+    //     var healthField = typeof(PlayerHealth).GetField("currentHealth",
+    //         System.Reflection.BindingFlags.NonPublic |
+    //         System.Reflection.BindingFlags.Instance);
+    //
+    //     if (healthField != null)
+    //     {
+    //         return (int)healthField.GetValue(playerHealth);
+    //     }
+    //
+    //     return 100; // Valor por defecto
+    // }
+
+    // /// <summary>
+    // /// Obtiene las monedas actuales del jugador.
+    // /// </summary>
+    // private int ObtenerMonedasActuales()
+    // {
+    //     if (playerHealth == null) return 0;
+    //
+    //     var goldField = typeof(PlayerHealth).GetField("currentGold",
+    //         System.Reflection.BindingFlags.NonPublic |
+    //         System.Reflection.BindingFlags.Instance);
+    //
+    //     if (goldField != null)
+    //     {
+    //         return (int)goldField.GetValue(playerHealth);
+    //     }
+    //
+    //     return 0;
+    // }
 
     private void OnDestroy()
     {
-        if (_playFabManager != null)
+        // Desuscribirse del evento
+        if (PlayFabLogin.Instancia != null)
         {
-            _playFabManager.OnLoginExitoso -= OnLoginExitoso;
+            PlayFabLogin.Instancia.OnLoginExitoso -= OnLoginExitoso;
         }
     }
 }
