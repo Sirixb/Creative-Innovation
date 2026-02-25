@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,16 +11,15 @@ public class PlayerDataManager : MonoBehaviour
     [SerializeField] public bool guardarEnCheckpoint = true;
 
     [Header("Data Saved")]
-    [SerializeField] private PlayerDataSaved playerDataSaved;
+    [SerializeField] private PlayerData playerData;
+    public PlayerData PlayerData => playerData;
 
-    [Header("Referencias del Jugador")]
-    [SerializeField] private PlayerHealth playerHealth;
-    [SerializeField] private Dash dash;
-    [SerializeField] private Transform playerTransform;
-
+    [Header("Data Service")]
     [SerializeField] private IDataService _iDataService;
 
-    public void Config(IDataService playFabService)
+    public event Action OnDatosCargados;
+
+    public void Initialize(IDataService playFabService)
     {
         this._iDataService = playFabService;
     }
@@ -31,15 +31,6 @@ public class PlayerDataManager : MonoBehaviour
         {
             PlayFabLogin.Instancia.OnLoginExitoso += OnLoginExitoso;
         }
-
-        if (!playerHealth)
-            playerHealth = FindObjectOfType<PlayerHealth>();
-
-        if (!dash)
-            dash = FindObjectOfType<Dash>();
-
-        if (!playerTransform)
-            playerTransform = playerHealth?.transform;
     }
 
     /// <summary>
@@ -62,7 +53,12 @@ public class PlayerDataManager : MonoBehaviour
     {
         if (_iDataService == null)
         {
-            Debug.LogError("[PlayerDataManager] PlayFabService no disponible.");
+            Debug.LogError("[PlayerDataManager] PlayFabDataService no disponible.");
+            return;
+        }
+        else if (!playerData)
+        {
+            Debug.LogError("[PlayerDataManager] PlayerData no disponible.");
             return;
         }
 
@@ -73,11 +69,9 @@ public class PlayerDataManager : MonoBehaviour
         {
             _iDataService.ObtenerDato("checkpointY", valorY =>
             {
-                if (float.TryParse(valorX, out float x) && float.TryParse(valorY, out float y) &&
-                    playerTransform != null)
+                if (float.TryParse(valorX, out float x) && float.TryParse(valorY, out float y))
                 {
-                    playerTransform.position = new Vector2(x, y);
-                    playerDataSaved.checkPointPosition = new Vector2(x, y);
+                    playerData.checkPointPosition = new Vector2(x, y);
                     Debug.Log($"[PlayerDataManager] Posición cargada: ({x}, {y})");
                 }
             });
@@ -86,22 +80,17 @@ public class PlayerDataManager : MonoBehaviour
         // Cargar llave
         _iDataService.ObtenerDato("tieneLlave", valor =>
         {
-            if (playerHealth)
-            {
-                bool tieneLlave = valor == "true";
-                playerHealth.HasKey = tieneLlave;
-                playerDataSaved.hasKey = tieneLlave;
-                Debug.Log($"[PlayerDataManager] Llave cargada: {tieneLlave}");
-            }
+            bool tieneLlave = valor == "true";
+            playerData.hasKey = tieneLlave;
+            Debug.Log($"[PlayerDataManager] Llave cargada: {tieneLlave}");
         });
 
         // Cargar salud
         _iDataService.ObtenerDato("salud", valor =>
         {
-            if (playerHealth && int.TryParse(valor, out int salud) && salud > 0)
+            if (int.TryParse(valor, out int salud) && salud > 0)
             {
-                playerHealth.SetHealthByPlayFab(salud);
-                playerDataSaved.currentHealth = salud;
+                playerData.currentHealth = salud;
                 Debug.Log($"[PlayerDataManager] Salud cargada: {salud}");
             }
             else
@@ -113,10 +102,9 @@ public class PlayerDataManager : MonoBehaviour
         // Cargar monedas
         _iDataService.ObtenerDato("monedas", valor =>
         {
-            if (playerHealth && int.TryParse(valor, out int currency))
+            if (int.TryParse(valor, out int currency))
             {
-                playerHealth.SetCurrencyByPlayFab(currency);
-                playerDataSaved.currentGold = currency;
+                playerData.currentGold = currency;
                 Debug.Log($"[PlayerDataManager] Monedas cargadas: {currency}");
             }
         });
@@ -124,56 +112,62 @@ public class PlayerDataManager : MonoBehaviour
         // Cargar estado del dash
         _iDataService.ObtenerDato("tieneDash", valor =>
         {
-            if (dash)
-            {
-                bool tieneDash = valor == "true";
-                dash.enabled = tieneDash;
-                playerDataSaved.dashPower = tieneDash;
-                Debug.Log($"[PlayerDataManager] Dash cargado: {tieneDash}");
-            }
+            bool tieneDash = valor == "true";
+            playerData.dashPower = tieneDash;
+            Debug.Log($"[PlayerDataManager] Dash cargado: {tieneDash}");
         });
+
+        Debug.Log("[PlayerDataManager] Datos Cargados...");
+        OnDatosCargados?.Invoke();
     }
+
 
     /// <summary>
     /// Guarda todos los datos del jugador en PlayFab.
     /// </summary>
-    public void GuardarDatosDelJugador(Vector3 position)
+    public void GuardarDatosDelJugador()
     {
         if (_iDataService == null)
         {
-            Debug.LogError("[PlayerDataManager] PlayFabService no disponible.");
+            Debug.LogError("[PlayerDataManager] PlayFabDataService no disponible.");
+            return;
+        }
+        else if (playerData == null)
+        {
+            Debug.LogError("[PlayerDataManager] PlayerData no disponible.");
             return;
         }
 
         Debug.Log("[PlayerDataManager] Guardando datos del jugador...");
 
         // Guardar posición actual del checkpoint
-        Vector2 posicionActual = position;
-        _iDataService.GuardarDato("checkpointX", posicionActual.x.ToString());
-        _iDataService.GuardarDato("checkpointY", posicionActual.y.ToString());
+        Vector2 checkPointPosition = playerData.checkPointPosition;
+        _iDataService.GuardarDato("checkpointX", checkPointPosition.x.ToString());
+        _iDataService.GuardarDato("checkpointY", (1.5f + checkPointPosition.y).ToString());
 
         // Guardar llave
-        bool tieneLlave = playerHealth != null && playerHealth.HasKey;
+        bool tieneLlave = playerData.hasKey;
         _iDataService.GuardarDato("tieneLlave", tieneLlave ? "true" : "false");
 
         // Guardar salud
-        int saludActual = /*ObtenerSaludActual();*/playerHealth.CurrentHealth;
+        int saludActual = playerData.currentHealth;
         _iDataService.GuardarDato("salud", saludActual.ToString());
 
         // Guardar monedas
-        int monedasActuales = /*ObtenerMonedasActuales();*/ playerHealth.CurrentGold;
+        int monedasActuales = /*ObtenerMonedasActuales();*/ playerData.currentGold;
+        ;
         _iDataService.GuardarDatos(new Dictionary<string, string>
         {
             { "monedas", monedasActuales.ToString() }
         });
 
         // Guardar estado del dash
-        bool tieneDash = dash != null && dash.enabled;
+        bool tieneDash = playerData.dashPower;
         _iDataService.GuardarDato("tieneDash", tieneDash ? "true" : "false");
 
         Debug.Log($"[PlayerDataManager] Datos guardados - Salud: {saludActual}, " +
                   $"Monedas: {monedasActuales}, Dash: {tieneDash}, Llave: {tieneLlave}," +
-                  $" Checkpoint: {posicionActual}");
+                  $" Checkpoint: {checkPointPosition}");
     }
 
     // /// <summary>

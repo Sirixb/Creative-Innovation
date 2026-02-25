@@ -14,7 +14,7 @@ using UnityEngine;
 /// - Datos de solo lectura (ReadOnlyData): Solo modificables desde el servidor
 /// - Datos internos (InternalData): Datos privados no accesibles desde el cliente
 /// </remarks>
-public class PlayFabService : MonoBehaviour, IDataService
+public class PlayFabDataService : MonoBehaviour, IDataService
 {
     private PlayFabLogin _playFabLogin;
 
@@ -24,7 +24,7 @@ public class PlayFabService : MonoBehaviour, IDataService
         
         if (_playFabLogin == null)
         {
-            Debug.LogError("[PlayFabService] PlayFabLogin no encontrado. Asegúrese de que existe en la escena.");
+            Debug.LogError("[PlayFabDataService] PlayFabLogin no encontrado. Asegúrese de que existe en la escena.");
             return;
         }
 
@@ -33,7 +33,7 @@ public class PlayFabService : MonoBehaviour, IDataService
 
     private void OnLoginExitoso()
     {
-        Debug.Log("[PlayFabService] Login exitoso, listo para sincronizar datos.");
+        Debug.Log("[PlayFabDataService] Login exitoso, listo para sincronizar datos.");
     }
 
     /// <summary>
@@ -53,13 +53,13 @@ public class PlayFabService : MonoBehaviour, IDataService
         PlayFabClientAPI.UpdateUserData(solicitud, 
             resultado => 
             {
-                Debug.Log("[PlayFabService] Datos guardados exitosamente.");
+                Debug.Log("[PlayFabDataService] Datos guardados exitosamente.");
                 onSuccess?.Invoke("Datos guardados");
             }, 
             error => 
             {
                 string mensaje = $"Error al guardar datos: {error.GenerateErrorReport()}";
-                Debug.LogError($"[PlayFabService] {mensaje}");
+                Debug.LogError($"[PlayFabDataService] {mensaje}");
                 onError?.Invoke(mensaje);
             });
     }
@@ -97,13 +97,13 @@ public class PlayFabService : MonoBehaviour, IDataService
         PlayFabClientAPI.GetUserData(solicitud, 
             resultado => 
             {
-                Debug.Log($"[PlayFabService] Datos obtenidos. Cantidad: {resultado.Data?.Count ?? 0}");
+                Debug.Log($"[PlayFabDataService] Datos obtenidos. Cantidad: {resultado.Data?.Count ?? 0}");
                 callback?.Invoke(resultado.Data);
             }, 
             error => 
             {
                 string mensaje = $"Error al obtener datos: {error.GenerateErrorReport()}";
-                Debug.LogError($"[PlayFabService] {mensaje}");
+                Debug.LogError($"[PlayFabDataService] {mensaje}");
                 onError?.Invoke(mensaje);
             });
     }
@@ -130,7 +130,7 @@ public class PlayFabService : MonoBehaviour, IDataService
                 }
                 else
                 {
-                    Debug.LogWarning($"[PlayFabService] La clave '{clave}' no existe en los datos del jugador.");
+                    Debug.LogWarning($"[PlayFabDataService] La clave '{clave}' no existe en los datos del jugador.");
                     callback?.Invoke(null);
                 }
             }, 
@@ -171,13 +171,13 @@ public class PlayFabService : MonoBehaviour, IDataService
                 PlayFabClientAPI.UpdatePlayerStatistics(solicitud,
                     resultado =>
                     {
-                        Debug.Log($"[PlayFabService] Estadística '{clave}' actualizada: {valorActual} + {incremento} = {nuevoValor}");
+                        Debug.Log($"[PlayFabDataService] Estadística '{clave}' actualizada: {valorActual} + {incremento} = {nuevoValor}");
                         callback?.Invoke(nuevoValor);
                     },
                     error =>
                     {
                         string mensaje = $"Error al incrementar dato: {error.GenerateErrorReport()}";
-                        Debug.LogError($"[PlayFabService] {mensaje}");
+                        Debug.LogError($"[PlayFabDataService] {mensaje}");
                         onError?.Invoke(mensaje);
                     });
             },
@@ -211,13 +211,13 @@ public class PlayFabService : MonoBehaviour, IDataService
         PlayFabClientAPI.UpdatePlayerStatistics(solicitud,
             resultado =>
             {
-                Debug.Log($"[PlayFabService] Estadística '{clave}' establecida a {valor}");
+                Debug.Log($"[PlayFabDataService] Estadística '{clave}' establecida a {valor}");
                 callback?.Invoke(valor);
             },
             error =>
             {
                 string mensaje = $"Error al establecer estadística: {error.GenerateErrorReport()}";
-                Debug.LogError($"[PlayFabService] {mensaje}");
+                Debug.LogError($"[PlayFabDataService] {mensaje}");
                 onError?.Invoke(mensaje);
             });
     }
@@ -240,13 +240,13 @@ public class PlayFabService : MonoBehaviour, IDataService
                 {
                     estadisticas[stat.StatisticName] = stat.Value;
                 }
-                Debug.Log("[PlayFabService] Estadísticas obtenidas.");
+                Debug.Log("[PlayFabDataService] Estadísticas obtenidas.");
                 callback?.Invoke(estadisticas);
             },
             error =>
             {
                 string mensaje = $"Error al obtener estadísticas: {error.GenerateErrorReport()}";
-                Debug.LogError($"[PlayFabService] {mensaje}");
+                Debug.LogError($"[PlayFabDataService] {mensaje}");
                 onError?.Invoke(mensaje);
             });
     }
@@ -285,7 +285,7 @@ public class PlayFabService : MonoBehaviour, IDataService
         if (!_playFabLogin.EstaAutenticado)
         {
             string mensaje = "Jugador no autenticado. Inicie sesión primero.";
-            Debug.LogWarning($"[PlayFabService] {mensaje}");
+            Debug.LogWarning($"[PlayFabDataService] {mensaje}");
             callbackError?.Invoke(mensaje);
             return false;
         }

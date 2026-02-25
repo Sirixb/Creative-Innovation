@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b4fab76b1756358429f8bdfc5cf56b9b, type: 3}
-  m_Name: PlayerDataSaved
+  m_Name: PlayerData
   m_EditorClassIdentifier: 
   checkPointPosition: {x: 0, y: 0}
   currentHealth: 0
   currentGold: 0
   dashPower: 0
   hasKey: 0
+  resetPosition: {x: -44.52, y: 11.31}

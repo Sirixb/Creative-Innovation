@@ -4,11 +4,11 @@ using UnityEngine;
 //BootStrapper = Iniciador (Installer)
 public class PlayFabBootstrapper : MonoBehaviour
 {
-    [SerializeField] private PlayFabService playFabService;
+    [SerializeField] private PlayFabDataService playFabDataService;
     [SerializeField] private PlayerDataManager playerDataManager;
 
     void Awake()
     {
-        playerDataManager.Config(playFabService);
+        playerDataManager.Initialize(playFabDataService);
     }
 }

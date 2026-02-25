@@ -5,6 +5,7 @@ public class KeyConsumable : ConsumableEffect
 {
     public override void ApplyEffect(PlayerHealth player)
     {
-        player.HasKey = true;
+        // player.HasKey = true;
+        playerData.hasKey = true;
     }
 }

@@ -20,6 +20,7 @@ public class Door : MonoBehaviour
     [SerializeField] private AudioClip finalMusic;
     [SerializeField] private AudioClip putKey;
 
+    [SerializeField] private PlayerData playerData;
     private void Start()
     {
         _initialPosition = transform.position.x;
@@ -49,13 +50,14 @@ public class Door : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        var playerHealth = other.GetComponent<PlayerHealth>();
-        if (playerHealth != null && playerHealth.HasKey)
+        if (!other.CompareTag("Player")) return;
+
+        if (playerData.hasKey)
         {
             findKeyCanvasGroup.alpha = 0;
             PutKey();
         }
-        else if (playerHealth)
+        else 
         {
             StartCoroutine(FindKey(findKeyCanvasGroup, targetAlpha: 1f));
         }

@@ -5,10 +5,11 @@ public class Checkpoint : MonoBehaviour
 {
     [Header("Configuración")]
     [SerializeField] private PlayerDataManager playerDataManager;
+    [SerializeField] private PlayerData playerData;
 
     private void Start()
     {
-        playerDataManager= FindObjectOfType<PlayerDataManager>();
+        playerDataManager = FindObjectOfType<PlayerDataManager>();
     }
 
     /// <summary>
@@ -18,9 +19,11 @@ public class Checkpoint : MonoBehaviour
     {
         if (!other.CompareTag("Player")) return;
         Debug.Log("[Checkpoint] Player collision");
-        if (playerDataManager.guardarEnCheckpoint)
+        playerData.checkPointPosition = transform.position;
+
+        if (playerDataManager && playerDataManager.guardarEnCheckpoint)
         {
-            playerDataManager.GuardarDatosDelJugador(transform.position);
+            playerDataManager.GuardarDatosDelJugador();
             Debug.Log("[Checkpoint] Checkpoint alcanzado - Datos guardados.");
         }
     }

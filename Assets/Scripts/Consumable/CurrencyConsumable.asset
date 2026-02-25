@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: CurrencyConsumable
   m_EditorClassIdentifier: 
   consumableName: GoldCoin
-  icon: {fileID: 21300000, guid: bbcb2c451f13b8c46a8207ba9a40a7c2, type: 3}
+  playerData: {fileID: 11400000, guid: 40e4723853b13da4cab5df267f4471aa, type: 2}
   currencyAmount: 1

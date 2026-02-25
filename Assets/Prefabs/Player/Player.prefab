@@ -783,7 +783,11 @@ MonoBehaviour:
   clip:
   - {fileID: 8300000, guid: 1963af748346cee4cba206da7f68b64e, type: 3}
   - {fileID: 8300000, guid: b85c942e07148634ba9f6fdcd26aca84, type: 3}
+  currentGold: 0
   hasKey: 0
+  dashPower: 0
+  playerData: {fileID: 11400000, guid: 40e4723853b13da4cab5df267f4471aa, type: 2}
+  dash: {fileID: 6868623319538607643}
 --- !u!114 &8327619843242226338
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,5 +1,4 @@
-﻿using TMPro;
-using UnityEngine;
+﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewCurrencyConsumable", menuName = "Consumables/Currency")]
 public class CurrencyConsumable : ConsumableEffect
@@ -9,5 +8,6 @@ public class CurrencyConsumable : ConsumableEffect
     public override void ApplyEffect(PlayerHealth playerHealth)
     {
         playerHealth.UpdateCurrency(currencyAmount);
+        playerData.currentGold += currencyAmount;
     }
 }

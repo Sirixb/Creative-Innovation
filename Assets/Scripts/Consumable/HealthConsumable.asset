@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: HealthConsumable
   m_EditorClassIdentifier: 
   consumableName: HealthGlobe
+  playerData: {fileID: 11400000, guid: 40e4723853b13da4cab5df267f4471aa, type: 2}
   healAmount: 10

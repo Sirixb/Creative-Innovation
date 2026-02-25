@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: NewKeyConsumable
   m_EditorClassIdentifier: 
   consumableName: Key
-  hasKey: 0
+  playerData: {fileID: 11400000, guid: 40e4723853b13da4cab5df267f4471aa, type: 2}
