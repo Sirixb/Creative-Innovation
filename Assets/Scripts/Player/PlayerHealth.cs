@@ -15,46 +15,40 @@ public class PlayerHealth : Health
     private Slider _healthSlider;
     private TMP_Text _goldText;
     [SerializeField] private int currentGold = 0;
-    [SerializeField] private bool hasKey = false;
-    [SerializeField] private bool dashPower = false;
 
     private const string HealthSliderText = "Health Slider";
     private const string CoinAmountText = "Gold Amount Text";
     private readonly int _dieHash = Animator.StringToHash("die");
-    
-    [Header("PlayFab")]
-    [SerializeField] private PlayerDataManager playerDataManager;
-    [Header("Player Data")]
-    [SerializeField] private PlayerData playerData;
-    public bool HasKey /*{ get*/ => hasKey; /*set => hasKey = value; }*/
-    public int CurrentGold => currentGold;
-    public int CurrentHealth => currentHealth;
-    public bool DashPower => dashPower;
-    [SerializeField] private Dash dash;
-   
-    
+
+    [Header("PlayFab and Player Data")]
+    private IPlayerDataManager _playerDataManager;
+    private PlayerData _playerData;
+
+
     public void Start()
     {
-        LoadPlayerData();//Se llama aqui para usar PlayerData SO sin Playfab
-        
-        playerDataManager = FindObjectOfType<PlayerDataManager>();
-        // if(playerDataManager != null)
-        //     playerDataManager.OnDatosCargados += LoadPlayerData;//con Playfab
-        
+        _playerDataManager = ServiceLocator.Get<IPlayerDataManager>();
+        if (_playerDataManager != null)
+            _playerData = _playerDataManager.PlayerData;
+
+        // LoadPlayerData();//Se llama aqui para usar PlayerData SO sin Playfab
+
+        if (_playerDataManager != null)
+            _playerDataManager.OnDatosCargados += LoadPlayerData; //con Playfab
+
         _healthSlider ??= GameObject.Find(HealthSliderText)?.GetComponent<Slider>();
         _goldText ??= GameObject.Find(CoinAmountText)?.GetComponent<TMP_Text>();
         UpdateHealthSlider();
         UpdateCurrencyUI();
     }
 
-    private void LoadPlayerData()
+    private void LoadPlayerData(PlayerData playerData)
     {
-        transform.position = playerData.checkPointPosition;
-        currentHealth = playerData.currentHealth;
-        currentGold = playerData.currentGold;
-        hasKey = playerData.hasKey;
-        dashPower = playerData.dashPower;
-        dash.enabled = playerData.dashPower;
+        transform.position = playerData.CheckPointPosition;
+        currentHealth = playerData.CurrentHealth;
+        currentGold = playerData.CurrentGold;
+        UpdateHealthSlider();
+        UpdateCurrencyUI();
     }
 
     public override void TakeDamage(int damageAmount, Transform hitTransform)
@@ -82,7 +76,7 @@ public class PlayerHealth : Health
     {
         _healthSlider.maxValue = maxHealth;
         _healthSlider.value = currentHealth;
-        playerData.currentHealth = currentHealth;
+        _playerData.CurrentHealth = currentHealth;
     }
 
     public void UpdateCurrency(int gold)
@@ -104,7 +98,7 @@ public class PlayerHealth : Health
 
     private void OnDestroy()
     {
-        if(playerDataManager)
-            playerDataManager.OnDatosCargados -= LoadPlayerData;
+        if (_playerDataManager != null)
+            _playerDataManager.OnDatosCargados -= LoadPlayerData;
     }
 }

@@ -20,11 +20,13 @@ public class Door : MonoBehaviour
     [SerializeField] private AudioClip finalMusic;
     [SerializeField] private AudioClip putKey;
 
-    [SerializeField] private PlayerData playerData;
+    private PlayerData _playerData;
     private void Start()
     {
         _initialPosition = transform.position.x;
         StartCoroutine(FindKey(findKeyCanvasGroup, targetAlpha: 0));
+
+        _playerData = ServiceLocator.Get<IPlayerDataManager>().PlayerData;
     }
 
     private void PutKey()
@@ -52,7 +54,7 @@ public class Door : MonoBehaviour
     {
         if (!other.CompareTag("Player")) return;
 
-        if (playerData.hasKey)
+        if (_playerData.HasKey)
         {
             findKeyCanvasGroup.alpha = 0;
             PutKey();

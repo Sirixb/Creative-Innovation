@@ -15,8 +15,16 @@ public class Spawner : MonoBehaviour
     }
 
     [SerializeField] private List<SpawnData> spawnList;
+    private IPlayerDataManager playerDataManager;
 
     private void Awake()
+    {
+        playerDataManager = ServiceLocator.Get<IPlayerDataManager>();
+        // playerDataManager.OnDatosCargados += SpawnCharacters;
+        SpawnCharacters();
+    }
+
+    private void SpawnCharacters()
     {
         foreach (var spawnData in spawnList)
         {
@@ -27,5 +35,10 @@ public class Spawner : MonoBehaviour
     public GameObject Spawn(string spawnDataCharacterId, Vector3 spawnPositionPosition)
     {
         return characterFactory.CreateCharacter(spawnDataCharacterId, spawnPositionPosition);
+    }
+
+    private void OnDisable()
+    {
+        // playerDataManager.OnDatosCargados -= SpawnCharacters;
     }
 }

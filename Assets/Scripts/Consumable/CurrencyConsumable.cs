@@ -8,6 +8,6 @@ public class CurrencyConsumable : ConsumableEffect
     public override void ApplyEffect(PlayerHealth playerHealth)
     {
         playerHealth.UpdateCurrency(currencyAmount);
-        playerData.currentGold += currencyAmount;
+        playerData.CurrentGold += currencyAmount;
     }
 }

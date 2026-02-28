@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class Dash : MonoBehaviour
@@ -13,10 +14,20 @@ public class Dash : MonoBehaviour
 
     private float _startingMoveSpeed;
     private bool _isDashing = false;
+    private IPlayerDataManager _playerDataManager;
 
     private void Awake()
     {
         playerController = GetComponent<PlayerController>();
+        
+        _playerDataManager = ServiceLocator.Get<IPlayerDataManager>();
+        if(_playerDataManager != null)
+            _playerDataManager.OnDatosCargados += ActivateDash;
+    }
+
+    private void ActivateDash(PlayerData playerData)
+    {
+        this.enabled = playerData.DashPower;
     }
 
     private void Start()

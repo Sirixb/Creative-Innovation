@@ -7,32 +7,36 @@ using UnityEngine.Serialization;
 public class DashPower : MonoBehaviour
 {
     [SerializeField] private AudioClip clip;
-    [SerializeField] private PlayerDataManager _playerDataManager;
 
-    [SerializeField] private PlayerData playerData;
+    private IPlayerDataManager _playerDataManager;
+    private PlayerData _playerData;
 
     private void OnEnable()
     {
-        _playerDataManager.OnDatosCargados += DestroyPower;
+        _playerDataManager = ServiceLocator.Get<IPlayerDataManager>();
+        if (_playerDataManager != null)
+            _playerDataManager.OnDatosCargados += LoadPlayerData;
+    }
+
+    private void LoadPlayerData(PlayerData playerData)
+    {
+        _playerData = playerData;
+        if (playerData.DashPower)
+            Destroy(gameObject);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.TryGetComponent(out Dash dash)) return;
         dash.enabled = true;
-        playerData.dashPower = true;
+        _playerData.DashPower = true;
         Destroy(gameObject);
         ServiceLocator.Get<AudioController>().PlaySFX(clip);
     }
 
-    private void DestroyPower()
-    {
-        if (playerData.dashPower)
-            Destroy(gameObject);
-    }
-
     private void OnDisable()
     {
-        _playerDataManager.OnDatosCargados -= DestroyPower;
+        if (_playerDataManager != null)
+            _playerDataManager.OnDatosCargados -= LoadPlayerData;
     }
 }

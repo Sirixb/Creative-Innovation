@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b4fab76b1756358429f8bdfc5cf56b9b, type: 3}
-  m_Name: PlayerData
+  m_Name: PlayerData JSON
   m_EditorClassIdentifier: 
-  checkPointPosition: {x: -32.61, y: 12}
-  currentHealth: 100
-  currentGold: 1
+  checkPointPosition: {x: -44.52, y: 11.31}
+  currentHealth: 90
+  currentGold: 90
   dashPower: 1
-  hasKey: 0
+  hasKey: 1
   resetPosition: {x: -44.52, y: 11.31}

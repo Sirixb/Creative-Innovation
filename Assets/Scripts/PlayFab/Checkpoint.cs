@@ -3,13 +3,13 @@ using UnityEngine;
 
 public class Checkpoint : MonoBehaviour
 {
-    [Header("Configuración")]
-    [SerializeField] private PlayerDataManager playerDataManager;
-    [SerializeField] private PlayerData playerData;
+    [SerializeField] private bool guardarEnCheckpoint = true;
+    [SerializeField] private bool resetDataPlayer = false;
+    private IPlayerDataManager _playerDataManager;
 
     private void Start()
     {
-        playerDataManager = FindObjectOfType<PlayerDataManager>();
+        _playerDataManager = ServiceLocator.Get<IPlayerDataManager>();
     }
 
     /// <summary>
@@ -19,11 +19,19 @@ public class Checkpoint : MonoBehaviour
     {
         if (!other.CompareTag("Player")) return;
         Debug.Log("[Checkpoint] Player collision");
-        playerData.checkPointPosition = transform.position;
 
-        if (playerDataManager && playerDataManager.guardarEnCheckpoint)
+        if (resetDataPlayer)
         {
-            playerDataManager.GuardarDatosDelJugador();
+            _playerDataManager.PlayerData.ResetData();
+        }
+        else
+        {
+            _playerDataManager.PlayerData.CheckPointPosition = transform.position;
+        }
+
+        if (_playerDataManager != null && guardarEnCheckpoint)
+        {
+            _playerDataManager.GuardarDatosDelJugador();
             Debug.Log("[Checkpoint] Checkpoint alcanzado - Datos guardados.");
         }
     }

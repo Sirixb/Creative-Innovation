@@ -10,7 +10,7 @@ public class GameController : MonoBehaviour
 {
     [SerializeField] private UIFade uiFade;
     [SerializeField] private float waitToLoadTime = 1f;
-    
+
     private PlayerHealth _playerHealth;
     private EnemyHealth _bossEnemyHealth;
 
@@ -18,20 +18,43 @@ public class GameController : MonoBehaviour
     [SerializeField] private List<DropConsumable> chests;
 
     [SerializeField] private AudioClip introMusic;
+
+    private PlayerData _playerData;
+    private IPlayerDataManager playerDataManager;
+
+
     public void Start()
+    {
+        playerDataManager = ServiceLocator.Get<IPlayerDataManager>();
+
+        if (playerDataManager != null)
+            _playerData = playerDataManager.PlayerData;
+
+        // if(playerDataManager != null && playerDataManager.DatosCargados)
+        //     playerDataManager.OnDatosCargados += GameControllerReferences;
+
+        GameControllerReferences();
+
+        ConfigKeyInChest();
+
+        var audioManager = ServiceLocator.Get<AudioController>();
+        audioManager?.PlayMusic(introMusic);
+    }
+
+    private void GameControllerReferences()
     {
         _playerHealth = GameObject.FindWithTag("Player").GetComponent<PlayerHealth>();
         _playerHealth.OnPlayerDie += GameOver;
         _bossEnemyHealth = GameObject.Find("Orc Boss(Clone)").GetComponent<EnemyHealth>();
         _bossEnemyHealth.OnEnemyDie += GameWin;
-        
+    }
+
+    private void ConfigKeyInChest()
+    {
+        if (_playerData.HasKey) return;
         chests = chestContainer.gameObject.GetComponentsInChildren<DropConsumable>().ToList();
-        
         var chestSelectTokey = Random.Range(0, chests.Count);
         chests[chestSelectTokey].HasKey = true;
-        
-        var audioManager = ServiceLocator.Get<AudioController>();
-        audioManager?.PlayMusic(introMusic);
     }
 
     private void GameWin()
